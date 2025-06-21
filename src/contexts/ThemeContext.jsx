@@ -30,7 +30,7 @@ const getDefaultTheme = () => {
   if (saved && THEMES[saved]) {
     return saved
   }
-  return 'retro' // 默认复古风格
+  return 'modern' // 默认现代风格
 }
 
 // 主题提供者组件

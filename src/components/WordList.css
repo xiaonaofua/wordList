@@ -154,26 +154,117 @@
   white-space: nowrap;
 }
 
-/* 删除按钮样式 */
-.delete-btn {
-  background: #dc3545;
+/* 操作按钮样式 */
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: #007bff;
   color: white;
   border: none;
-  padding: 4px 8px;
+  padding: 4px 6px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  height: 28px;
+  min-width: 28px;
+  height: 24px;
+}
+
+.edit-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
 }
 
 .delete-btn:hover {
   background: #c82333;
   transform: scale(1.05);
+}
+
+/* 编辑模式样式 */
+.edit-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.save-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+}
+
+.save-btn:hover {
+  background: #1e7e34;
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+}
+
+.cancel-btn:hover {
+  background: #545b62;
+  transform: scale(1.05);
+}
+
+.edit-input {
+  width: 100%;
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 /* 響應式設計 */

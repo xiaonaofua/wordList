@@ -4,6 +4,12 @@
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 24px;
+
+  /* iOS 兼容性 */
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .debug-panel h3 {
@@ -46,6 +52,15 @@
   background: #c82333;
 }
 
+.config-btn {
+  background: #28a745;
+  color: white;
+}
+
+.config-btn:hover:not(:disabled) {
+  background: #1e7e34;
+}
+
 .debug-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -73,12 +88,143 @@
   color: #333;
 }
 
+/* Supabase 配置面板 */
+.supabase-config-panel {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.supabase-config-panel h4 {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.config-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-form label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.config-input {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+
+  /* iOS 兼容性 */
+  -webkit-appearance: none;
+  -webkit-border-radius: 4px;
+}
+
+.config-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.config-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.save-config-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-config-btn:hover {
+  background: #1e7e34;
+}
+
+.cancel-config-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-config-btn:hover {
+  background: #545b62;
+}
+
+.config-help {
+  margin-top: 16px;
+  padding: 12px;
+  background: #e9ecef;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.config-help p {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.config-help ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.config-help li {
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
 @media (max-width: 768px) {
   .debug-actions {
     flex-direction: column;
   }
-  
+
   .debug-actions button {
     width: 100%;
+  }
+
+  .config-actions {
+    flex-direction: column;
+  }
+
+  .config-actions button {
+    width: 100%;
+  }
+}
+
+/* iOS Safari 特殊處理 */
+@supports (-webkit-touch-callout: none) {
+  .debug-panel {
+    position: relative;
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
+  .config-input {
+    font-size: 16px; /* 防止 iOS 縮放 */
   }
 }

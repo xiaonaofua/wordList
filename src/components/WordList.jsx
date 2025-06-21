@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
-import { getAllWords, deleteWord } from '../utils/wordStorage';
+import { getAllWords, deleteWord, updateWord } from '../utils/wordStorage';
 import { useLanguage } from '../contexts/LanguageContext';
 import './WordList.css';
 
 const WordList = ({ refreshTrigger }) => {
   const { t, currentLanguage } = useLanguage();
   const [words, setWords] = useState([]);
+  const [editingWord, setEditingWord] = useState(null);
+  const [editForm, setEditForm] = useState({
+    original_text: '',
+    pronunciation: '',
+    translation: '',
+    example: ''
+  });
 
   // 加載生詞列表（按最新時間排序）
   const loadWords = async () => {
@@ -34,6 +41,67 @@ const WordList = ({ refreshTrigger }) => {
         alert(t('deleteWordError') + '：' + (error.message || '未知錯誤'));
       }
     }
+  };
+
+  // 開始編輯詞彙
+  const handleEdit = (word) => {
+    setEditingWord(word.id);
+    setEditForm({
+      original_text: word.original_text || word.japanese || '',
+      pronunciation: word.pronunciation || word.reading || '',
+      translation: word.translation || word.chinese || '',
+      example: word.example || ''
+    });
+  };
+
+  // 取消編輯
+  const handleCancelEdit = () => {
+    setEditingWord(null);
+    setEditForm({
+      original_text: '',
+      pronunciation: '',
+      translation: '',
+      example: ''
+    });
+  };
+
+  // 保存編輯
+  const handleSaveEdit = async () => {
+    if (!editForm.original_text.trim() || !editForm.translation.trim()) {
+      alert(t('fillRequired'));
+      return;
+    }
+
+    try {
+      await updateWord(editingWord, {
+        original_text: editForm.original_text.trim(),
+        pronunciation: editForm.pronunciation.trim() || null,
+        translation: editForm.translation.trim(),
+        example: editForm.example.trim() || null
+      });
+
+      setEditingWord(null);
+      setEditForm({
+        original_text: '',
+        pronunciation: '',
+        translation: '',
+        example: ''
+      });
+      loadWords(); // 重新加載列表
+      alert(t('wordUpdateSuccess') || '詞彙更新成功！');
+    } catch (error) {
+      console.error('Error updating word:', error);
+      alert(t('wordUpdateError') || '更新詞彙時發生錯誤：' + (error.message || '未知錯誤'));
+    }
+  };
+
+  // 處理編輯表單輸入
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   // 格式化時間顯示
@@ -79,40 +147,121 @@ const WordList = ({ refreshTrigger }) => {
             <tbody>
               {words.map((word) => (
                 <tr key={word.id} className="word-row">
-                  <td className="col-original">
-                    <span className="original-text">{word.original_text || word.japanese}</span>
-                  </td>
-                  <td className="col-pronunciation">
-                    <span className="pronunciation">
-                      {word.pronunciation || word.reading || '-'}
-                    </span>
-                  </td>
-                  <td className="col-translation">
-                    <span className="translation">{word.translation || word.chinese}</span>
-                  </td>
-                  <td className="col-example">
-                    <span className="example" title={word.example}>
-                      {word.example ? (
-                        word.example.length > 30
-                          ? word.example.substring(0, 30) + '...'
-                          : word.example
-                      ) : '-'}
-                    </span>
-                  </td>
-                  <td className="col-created">
-                    <span className="created-date">
-                      {formatDate(getCreatedAt(word))}
-                    </span>
-                  </td>
-                  <td className="col-actions">
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(word.id, word.original_text || word.japanese)}
-                      title={t('deleteWord')}
-                    >
-                      🗑️
-                    </button>
-                  </td>
+                  {editingWord === word.id ? (
+                    // 編輯模式
+                    <>
+                      <td className="col-original">
+                        <input
+                          type="text"
+                          name="original_text"
+                          value={editForm.original_text}
+                          onChange={handleEditInputChange}
+                          className="edit-input"
+                          placeholder={t('originalPlaceholder')}
+                        />
+                      </td>
+                      <td className="col-pronunciation">
+                        <input
+                          type="text"
+                          name="pronunciation"
+                          value={editForm.pronunciation}
+                          onChange={handleEditInputChange}
+                          className="edit-input"
+                          placeholder={t('pronunciationPlaceholder')}
+                        />
+                      </td>
+                      <td className="col-translation">
+                        <input
+                          type="text"
+                          name="translation"
+                          value={editForm.translation}
+                          onChange={handleEditInputChange}
+                          className="edit-input"
+                          placeholder={t('translationPlaceholder')}
+                        />
+                      </td>
+                      <td className="col-example">
+                        <input
+                          type="text"
+                          name="example"
+                          value={editForm.example}
+                          onChange={handleEditInputChange}
+                          className="edit-input"
+                          placeholder={t('examplePlaceholder')}
+                        />
+                      </td>
+                      <td className="col-created">
+                        <span className="created-date">
+                          {formatDate(getCreatedAt(word))}
+                        </span>
+                      </td>
+                      <td className="col-actions">
+                        <div className="edit-actions">
+                          <button
+                            className="save-btn"
+                            onClick={handleSaveEdit}
+                            title={t('save') || '保存'}
+                          >
+                            ✓
+                          </button>
+                          <button
+                            className="cancel-btn"
+                            onClick={handleCancelEdit}
+                            title={t('cancel') || '取消'}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    // 顯示模式
+                    <>
+                      <td className="col-original">
+                        <span className="original-text">{word.original_text || word.japanese}</span>
+                      </td>
+                      <td className="col-pronunciation">
+                        <span className="pronunciation">
+                          {word.pronunciation || word.reading || '-'}
+                        </span>
+                      </td>
+                      <td className="col-translation">
+                        <span className="translation">{word.translation || word.chinese}</span>
+                      </td>
+                      <td className="col-example">
+                        <span className="example" title={word.example}>
+                          {word.example ? (
+                            word.example.length > 30
+                              ? word.example.substring(0, 30) + '...'
+                              : word.example
+                          ) : '-'}
+                        </span>
+                      </td>
+                      <td className="col-created">
+                        <span className="created-date">
+                          {formatDate(getCreatedAt(word))}
+                        </span>
+                      </td>
+                      <td className="col-actions">
+                        <div className="action-buttons">
+                          <button
+                            className="edit-btn"
+                            onClick={() => handleEdit(word)}
+                            title={t('editWord') || '編輯'}
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(word.id, word.original_text || word.japanese)}
+                            title={t('deleteWord')}
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

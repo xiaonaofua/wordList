@@ -98,7 +98,7 @@ const AppContent = () => {
       </main>
 
       <footer className="app-footer">
-        <p>© 2024 {t('footerText')}</p>
+        <p>© 2025 {t('footerText')}</p>
         <p className="storage-info">
           {isCloudConfigured ? `🌐 ${t('cloudStorage')}` : `💾 ${t('localStorage')}`}
         </p>

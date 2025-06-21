@@ -189,6 +189,63 @@ body.theme-retro .created-date {
   font-size: 10px;
 }
 
+/* 編輯按鈕樣式 */
+body.theme-retro .edit-btn {
+  background: #0000ff;
+  color: #fff;
+  border: 2px outset #0000ff;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+body.theme-retro .edit-btn:hover {
+  background: #4444ff;
+  border: 2px outset #4444ff;
+}
+
+body.theme-retro .save-btn {
+  background: #008000;
+  color: #fff;
+  border: 2px outset #008000;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+body.theme-retro .save-btn:hover {
+  background: #00aa00;
+  border: 2px outset #00aa00;
+}
+
+body.theme-retro .cancel-btn {
+  background: #808080;
+  color: #fff;
+  border: 2px outset #808080;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+body.theme-retro .cancel-btn:hover {
+  background: #a0a0a0;
+  border: 2px outset #a0a0a0;
+}
+
+body.theme-retro .edit-input {
+  background: #fff;
+  color: #000;
+  border: 2px inset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 10px;
+  padding: 1px 2px;
+}
+
+body.theme-retro .edit-input:focus {
+  outline: 1px dotted #000;
+  outline-offset: -2px;
+  box-shadow: none;
+  border-color: #c0c0c0;
+}
+
 /* 统计卡片样式 */
 body.theme-retro .stat-card {
   background: #fff;

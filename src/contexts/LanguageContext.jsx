@@ -139,7 +139,12 @@ export const translations = {
     modernTheme: 'Modern Style',
 
     // 表格
-    actions: 'Actions'
+    actions: 'Actions',
+    editWord: 'Edit',
+    save: 'Save',
+    cancel: 'Cancel',
+    wordUpdateSuccess: 'Word updated successfully!',
+    wordUpdateError: 'Error updating word'
   },
 
   zh: {
@@ -265,7 +270,12 @@ export const translations = {
     modernTheme: '现代风格',
 
     // 表格
-    actions: '操作'
+    actions: '操作',
+    editWord: '編輯',
+    save: '保存',
+    cancel: '取消',
+    wordUpdateSuccess: '詞彙更新成功！',
+    wordUpdateError: '更新詞彙時發生錯誤'
   }
 }
 
