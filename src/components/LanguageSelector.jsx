@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useLanguage } from '../utils/i18n'
+import { useLanguage } from '../contexts/LanguageContext'
 import './LanguageSelector.css'
 
 const LanguageSelector = () => {

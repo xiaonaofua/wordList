@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { addWord } from '../utils/wordStorage';
-import { useLanguage } from '../utils/i18n';
+import { useLanguage } from '../contexts/LanguageContext';
 import './WordForm.css';
 
 const WordForm = ({ onWordAdded }) => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const [formData, setFormData] = useState({
     originalText: '',
     pronunciation: '',

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getAllWords, deleteWord } from '../utils/wordStorage';
-import { useLanguage } from '../utils/i18n';
+import { useLanguage } from '../contexts/LanguageContext';
 import './WordList.css';
 
 const WordList = ({ refreshTrigger }) => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const [words, setWords] = useState([]);
 
   // 加載生詞列表（按最新時間排序）
@@ -18,10 +18,10 @@ const WordList = ({ refreshTrigger }) => {
     }
   };
 
-  // 初始加載和刷新時重新加載
+  // 初始加載、刷新和語言變化時重新加載
   useEffect(() => {
     loadWords();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, currentLanguage]); // 添加語言變化監聽
 
   // 處理刪除詞彙
   const handleDelete = async (id, originalText) => {

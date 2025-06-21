@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getAllWords } from '../utils/wordStorage';
-import { useLanguage } from '../utils/i18n';
+import { useLanguage } from '../contexts/LanguageContext';
 import './WordStats.css';
 
 const WordStats = ({ refreshTrigger }) => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const [stats, setStats] = useState({
     totalWords: 0,
     monthlyStats: [],
@@ -78,7 +78,7 @@ const WordStats = ({ refreshTrigger }) => {
 
   useEffect(() => {
     calculateStats();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, currentLanguage]); // 添加語言變化監聽
 
   // 格式化月份顯示
   const formatMonth = (monthStr) => {

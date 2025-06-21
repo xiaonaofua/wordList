@@ -6,11 +6,12 @@ import SupabaseSetup from './components/SupabaseSetup'
 import DebugPanel from './components/DebugPanel'
 import DataMigration from './components/DataMigration'
 import LanguageSelector from './components/LanguageSelector'
-import { useLanguage } from './utils/i18n'
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
 
-function App() {
+// 主應用組件（內部）
+const AppContent = () => {
   const { t } = useLanguage()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
@@ -119,6 +120,15 @@ function App() {
         <DataMigration onClose={() => setShowMigration(false)} />
       )}
     </div>
+  )
+}
+
+// 主應用組件（外部包裝）
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   )
 }
 
