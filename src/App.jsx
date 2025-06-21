@@ -97,14 +97,14 @@ function App() {
           </div>
         )}
 
-        {/* 統計信息 */}
-        <WordStats refreshTrigger={refreshTrigger} />
+        {/* 添加新詞彙表單 - 最頂部位置 */}
+        <WordForm onWordAdded={handleWordAdded} />
 
-        {/* 最新生詞列表 - 最醒目位置 */}
+        {/* 最新詞彙列表 - 第二位置 */}
         <WordList refreshTrigger={refreshTrigger} />
 
-        {/* 添加新生詞表單 */}
-        <WordForm onWordAdded={handleWordAdded} />
+        {/* 統計信息 - 底部位置 */}
+        <WordStats refreshTrigger={refreshTrigger} />
       </main>
 
       <footer className="app-footer">
