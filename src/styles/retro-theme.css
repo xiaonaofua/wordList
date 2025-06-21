@@ -1,0 +1,301 @@
+/* Windows 98 / Early IE 复古主题样式 */
+
+/* 全局复古样式 */
+body.theme-retro {
+  background: #008080 !important;
+  font-family: 'MS Sans Serif', 'Tahoma', sans-serif !important;
+  font-size: 11px !important;
+}
+
+/* 应用容器 */
+body.theme-retro .app {
+  background: #008080;
+  min-height: 100vh;
+}
+
+/* 头部样式 */
+body.theme-retro .app-header {
+  background: #c0c0c0;
+  border-bottom: 2px solid #808080;
+  padding: 8px;
+}
+
+body.theme-retro .header-content {
+  background: none;
+}
+
+body.theme-retro .header-text h1 {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: none;
+  margin: 0;
+}
+
+body.theme-retro .header-text p {
+  color: #000;
+  font-size: 11px;
+  margin: 2px 0 0 0;
+}
+
+/* 按钮样式 */
+body.theme-retro button {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+body.theme-retro button:hover {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+}
+
+body.theme-retro button:active {
+  border: 2px inset #c0c0c0;
+}
+
+body.theme-retro button:disabled {
+  background: #c0c0c0;
+  color: #808080;
+  border: 2px outset #c0c0c0;
+}
+
+/* 输入框样式 */
+body.theme-retro input,
+body.theme-retro textarea {
+  background: #fff;
+  color: #000;
+  border: 2px inset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+body.theme-retro input:focus,
+body.theme-retro textarea:focus {
+  outline: 1px dotted #000;
+  outline-offset: -2px;
+}
+
+/* 卡片样式 */
+body.theme-retro .word-form-container,
+body.theme-retro .word-list-container,
+body.theme-retro .word-stats {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 8px;
+  padding: 8px;
+}
+
+/* 标题样式 */
+body.theme-retro h2,
+body.theme-retro h3 {
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  text-shadow: none;
+}
+
+/* 表单样式 */
+body.theme-retro .form-group label {
+  color: #000;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+body.theme-retro .form-actions {
+  gap: 4px;
+}
+
+/* 词汇列表样式 */
+body.theme-retro .word-item {
+  background: #fff;
+  border: 1px solid #808080;
+  border-radius: 0;
+  margin: 4px 0;
+  padding: 8px;
+}
+
+body.theme-retro .original-text {
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+body.theme-retro .pronunciation {
+  color: #000080;
+  font-size: 11px;
+}
+
+body.theme-retro .translation {
+  color: #008000;
+  font-size: 11px;
+}
+
+body.theme-retro .example {
+  color: #000;
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* 统计卡片样式 */
+body.theme-retro .stat-card {
+  background: #fff;
+  border: 2px inset #c0c0c0;
+  border-radius: 0;
+  padding: 8px;
+  text-align: center;
+}
+
+body.theme-retro .stat-number {
+  color: #000080;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+body.theme-retro .stat-label {
+  color: #000;
+  font-size: 10px;
+}
+
+/* 删除按钮样式 */
+body.theme-retro .delete-btn {
+  background: #ff0000;
+  color: #fff;
+  border: 2px outset #ff0000;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+body.theme-retro .delete-btn:hover {
+  background: #ff4444;
+  border: 2px outset #ff4444;
+}
+
+/* 页脚样式 */
+body.theme-retro .app-footer {
+  background: #c0c0c0;
+  border-top: 2px solid #808080;
+  color: #000;
+  font-size: 10px;
+  padding: 4px 8px;
+}
+
+/* 认证界面样式 */
+body.theme-retro .auth-container {
+  background: #008080;
+}
+
+body.theme-retro .auth-card {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-retro .auth-header h2 {
+  color: #000;
+  font-size: 14px;
+}
+
+body.theme-retro .auth-header p {
+  color: #000;
+  font-size: 11px;
+}
+
+body.theme-retro .auth-submit-btn {
+  background: #0000ff;
+  color: #fff;
+  border: 2px outset #0000ff;
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+body.theme-retro .auth-submit-btn:hover {
+  background: #4444ff;
+  border: 2px outset #4444ff;
+}
+
+body.theme-retro .link-btn {
+  color: #0000ff;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  font-size: 11px;
+}
+
+body.theme-retro .link-btn:hover {
+  color: #0000aa;
+}
+
+/* 错误和成功消息 */
+body.theme-retro .error-message {
+  background: #ffcccc;
+  color: #800000;
+  border: 1px solid #ff0000;
+  border-radius: 0;
+  font-size: 11px;
+}
+
+body.theme-retro .success-message {
+  background: #ccffcc;
+  color: #008000;
+  border: 1px solid #00ff00;
+  border-radius: 0;
+  font-size: 11px;
+}
+
+/* 滚动条样式 */
+body.theme-retro ::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+body.theme-retro ::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 1px inset #c0c0c0;
+}
+
+body.theme-retro ::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+}
+
+body.theme-retro ::-webkit-scrollbar-thumb:hover {
+  background: #d0d0d0;
+}
+
+body.theme-retro ::-webkit-scrollbar-corner {
+  background: #c0c0c0;
+}
+
+/* 加载动画 */
+body.theme-retro .loading-spinner {
+  border: 4px solid #c0c0c0;
+  border-top: 4px solid #000;
+  border-radius: 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  body.theme-retro {
+    font-size: 10px !important;
+  }
+  
+  body.theme-retro h1 {
+    font-size: 14px !important;
+  }
+  
+  body.theme-retro h2 {
+    font-size: 11px !important;
+  }
+}

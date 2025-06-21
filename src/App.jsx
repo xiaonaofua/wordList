@@ -6,11 +6,14 @@ import SupabaseSetup from './components/SupabaseSetup'
 import DebugPanel from './components/DebugPanel'
 import DataMigration from './components/DataMigration'
 import LanguageSelector from './components/LanguageSelector'
+import ThemeSelector from './components/ThemeSelector'
 import Auth from './components/Auth'
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
+import './styles/retro-theme.css'
 
 // 主應用組件（內部）
 const AppContent = () => {
@@ -58,6 +61,7 @@ const AppContent = () => {
             <p>{t('appSubtitle')}</p>
           </div>
           <div className="header-actions">
+            <ThemeSelector />
             <LanguageSelector />
             <div className="user-info">
               <span className="welcome-text">
@@ -108,11 +112,13 @@ const AppContent = () => {
 // 主應用組件（外部包裝）
 function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   )
 }
 

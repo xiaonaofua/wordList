@@ -130,7 +130,13 @@ export const translations = {
     loginError: 'Login failed',
     registerSuccess: 'Registration successful! Please check your email to confirm your account',
     welcome: 'Welcome',
-    confirmLogout: 'Are you sure you want to logout?'
+    confirmLogout: 'Are you sure you want to logout?',
+
+    // 主题
+    selectTheme: 'Select Theme',
+    theme: 'Theme',
+    retroTheme: 'Retro Style',
+    modernTheme: 'Modern Style'
   },
 
   zh: {
@@ -247,7 +253,13 @@ export const translations = {
     loginError: '登录失败',
     registerSuccess: '注册成功！请检查邮箱确认账户',
     welcome: '欢迎',
-    confirmLogout: '确定要退出登录吗？'
+    confirmLogout: '确定要退出登录吗？',
+
+    // 主题
+    selectTheme: '选择主题',
+    theme: '主题',
+    retroTheme: '复古风格',
+    modernTheme: '现代风格'
   }
 }
 

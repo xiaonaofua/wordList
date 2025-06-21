@@ -1,0 +1,209 @@
+.theme-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+}
+
+.theme-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.theme-name {
+  flex: 1;
+  text-align: left;
+}
+
+.theme-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+  opacity: 0.8;
+}
+
+.theme-arrow.open {
+  transform: rotate(180deg);
+}
+
+.theme-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 200px;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.theme-option:hover {
+  background-color: #f8f9fa;
+}
+
+.theme-option.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.theme-option .theme-flag {
+  font-size: 1.1rem;
+  min-width: 20px;
+}
+
+.theme-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.theme-info .theme-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.theme-description {
+  font-size: 0.75rem;
+  color: #666;
+  opacity: 0.8;
+}
+
+.theme-check {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* 复古主题样式 */
+body.theme-retro .theme-button {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  backdrop-filter: none;
+}
+
+body.theme-retro .theme-button:hover {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+  transform: none;
+}
+
+body.theme-retro .theme-button:active {
+  border: 2px inset #c0c0c0;
+}
+
+body.theme-retro .theme-dropdown {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-retro .theme-option {
+  color: #000;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+body.theme-retro .theme-option:hover {
+  background-color: #0000ff;
+  color: #fff;
+}
+
+body.theme-retro .theme-option.active {
+  background-color: #000080;
+  color: #fff;
+}
+
+body.theme-retro .theme-description {
+  color: inherit;
+  opacity: 0.7;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .theme-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+  
+  .theme-dropdown {
+    min-width: 180px;
+  }
+  
+  .theme-option {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-button {
+    padding: 6px 8px;
+    min-width: 80px;
+  }
+  
+  .theme-button .theme-name {
+    display: none;
+  }
+  
+  .theme-arrow {
+    display: none;
+  }
+}
