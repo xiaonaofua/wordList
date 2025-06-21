@@ -116,35 +116,77 @@ body.theme-retro .form-actions {
   gap: 4px;
 }
 
-/* 词汇列表样式 */
-body.theme-retro .word-item {
-  background: #fff;
-  border: 1px solid #808080;
+/* 词汇表格样式 */
+body.theme-retro .word-table-container {
+  border: 2px inset #c0c0c0;
   border-radius: 0;
-  margin: 4px 0;
-  padding: 8px;
+  background: #fff;
+}
+
+body.theme-retro .word-table {
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+body.theme-retro .word-table thead {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+}
+
+body.theme-retro .word-table th {
+  background: #c0c0c0;
+  color: #000;
+  border: 1px outset #c0c0c0;
+  padding: 4px 6px;
+  font-weight: normal;
+  font-size: 11px;
+}
+
+body.theme-retro .word-table td {
+  background: #fff;
+  color: #000;
+  border: 1px solid #c0c0c0;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+body.theme-retro .word-table tbody tr:hover {
+  background-color: #e0e0e0;
+}
+
+body.theme-retro .word-table tbody tr:hover td {
+  background-color: #e0e0e0;
 }
 
 body.theme-retro .original-text {
   color: #000;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
 }
 
 body.theme-retro .pronunciation {
   color: #000080;
-  font-size: 11px;
+  font-size: 10px;
+  font-style: normal;
 }
 
 body.theme-retro .translation {
   color: #008000;
   font-size: 11px;
+  font-weight: normal;
 }
 
 body.theme-retro .example {
   color: #000;
   font-size: 10px;
   font-style: italic;
+}
+
+body.theme-retro .created-date {
+  color: #000;
+  font-size: 10px;
 }
 
 /* 统计卡片样式 */

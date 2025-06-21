@@ -136,7 +136,10 @@ export const translations = {
     selectTheme: 'Select Theme',
     theme: 'Theme',
     retroTheme: 'Retro Style',
-    modernTheme: 'Modern Style'
+    modernTheme: 'Modern Style',
+
+    // 表格
+    actions: 'Actions'
   },
 
   zh: {
@@ -259,7 +262,10 @@ export const translations = {
     selectTheme: '选择主题',
     theme: '主题',
     retroTheme: '复古风格',
-    modernTheme: '现代风格'
+    modernTheme: '现代风格',
+
+    // 表格
+    actions: '操作'
   }
 }
 

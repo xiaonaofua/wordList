@@ -30,118 +30,150 @@
   font-size: 1.1rem;
 }
 
-.word-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.word-item {
-  border: 2px solid #f0f0f0;
+/* 表格容器 */
+.word-table-container {
+  overflow-x: auto;
   border-radius: 8px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  background: #fafafa;
+  border: 2px solid #e9ecef;
+  background: white;
 }
 
-.word-item:hover {
-  border-color: #4CAF50;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
-  transform: translateY(-1px);
+/* 表格样式 */
+.word-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: white;
 }
 
-.word-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* 表头样式 */
+.word-table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
 }
 
-.word-main {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.word-table th {
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-right: 1px solid #dee2e6;
+  white-space: nowrap;
 }
 
-.original-section {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
+.word-table th:last-child {
+  border-right: none;
 }
 
+/* 表格行样式 */
+.word-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.2s ease;
+}
+
+.word-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.word-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* 表格单元格样式 */
+.word-table td {
+  padding: 10px 8px;
+  border-right: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.word-table td:last-child {
+  border-right: none;
+}
+
+/* 列宽设置 */
+.col-original {
+  width: 20%;
+  min-width: 120px;
+}
+
+.col-pronunciation {
+  width: 15%;
+  min-width: 100px;
+}
+
+.col-translation {
+  width: 20%;
+  min-width: 120px;
+}
+
+.col-example {
+  width: 30%;
+  min-width: 150px;
+}
+
+.col-created {
+  width: 10%;
+  min-width: 80px;
+}
+
+.col-actions {
+  width: 5%;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* 文本样式 */
 .original-text {
-  font-size: 1.4rem;
   font-weight: bold;
   color: #2c3e50;
+  font-size: 1rem;
 }
 
 .pronunciation {
-  font-size: 1.1rem;
   color: #7f8c8d;
   font-style: italic;
+  font-size: 0.9rem;
 }
 
 .translation {
-  font-size: 1.2rem;
   color: #27ae60;
   font-weight: 600;
+  font-size: 1rem;
 }
 
 .example {
-  background: #f8f9fa;
-  padding: 12px;
-  border-radius: 6px;
-  border-left: 4px solid #4CAF50;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  color: #495057;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  cursor: help;
 }
 
-.example strong {
-  color: #555;
-}
-
-.word-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
-}
-
-.timestamps {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.created-date {
+  color: #6c757d;
   font-size: 0.8rem;
-  color: #888;
+  white-space: nowrap;
 }
 
-.created,
-.updated {
-  display: block;
-}
-
-.updated {
-  color: #666;
-  font-weight: 500;
-}
-
+/* 删除按钮样式 */
 .delete-btn {
-  background: none;
+  background: #dc3545;
+  color: white;
   border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 8px;
+  padding: 4px 8px;
   border-radius: 4px;
-  transition: all 0.3s ease;
-  opacity: 0.6;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 28px;
 }
 
 .delete-btn:hover {
-  background: #ffebee;
-  opacity: 1;
-  transform: scale(1.1);
+  background: #c82333;
+  transform: scale(1.05);
 }
 
 /* 響應式設計 */
@@ -153,40 +185,44 @@
   .word-list-header h2 {
     font-size: 1.5rem;
   }
-  
-  .word-item {
-    padding: 16px;
+
+  .word-table-container {
+    border-radius: 4px;
   }
-  
-  .original-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+
+  .word-table {
+    font-size: 0.8rem;
+  }
+
+  .word-table th,
+  .word-table td {
+    padding: 8px 4px;
+  }
+
+  /* 隐藏例句列在小屏幕上 */
+  .col-example {
+    display: none;
   }
 
   .original-text {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
   }
 
   .pronunciation {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .translation {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
-  
-  .word-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+
+  .created-date {
+    font-size: 0.7rem;
   }
-  
-  .timestamps {
-    align-self: stretch;
-  }
-  
+
   .delete-btn {
-    align-self: flex-end;
+    min-width: 28px;
+    height: 24px;
+    font-size: 0.7rem;
   }
 }

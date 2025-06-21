@@ -64,48 +64,59 @@ const WordList = ({ refreshTrigger }) => {
           <p>{t('noWordsSubtext')}</p>
         </div>
       ) : (
-        <div className="word-list">
-          {words.map((word) => (
-            <div key={word.id} className="word-item">
-              <div className="word-content">
-                <div className="word-main">
-                  <div className="original-section">
+        <div className="word-table-container">
+          <table className="word-table">
+            <thead>
+              <tr>
+                <th className="col-original">{t('originalText')}</th>
+                <th className="col-pronunciation">{t('pronunciation')}</th>
+                <th className="col-translation">{t('translation')}</th>
+                <th className="col-example">{t('example')}</th>
+                <th className="col-created">{t('created')}</th>
+                <th className="col-actions">{t('actions') || '操作'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {words.map((word) => (
+                <tr key={word.id} className="word-row">
+                  <td className="col-original">
                     <span className="original-text">{word.original_text || word.japanese}</span>
-                    {(word.pronunciation || word.reading) && (
-                      <span className="pronunciation">({word.pronunciation || word.reading})</span>
-                    )}
-                  </div>
-                  <div className="translation">{word.translation || word.chinese}</div>
-                </div>
-                
-                {word.example && (
-                  <div className="example">
-                    <strong>例句：</strong>{word.example}
-                  </div>
-                )}
-                
-                <div className="word-meta">
-                  <div className="timestamps">
-                    <span className="created">
-                      {t('created')}：{formatDate(getCreatedAt(word))}
+                  </td>
+                  <td className="col-pronunciation">
+                    <span className="pronunciation">
+                      {word.pronunciation || word.reading || '-'}
                     </span>
-                    {getUpdatedAt(word) !== getCreatedAt(word) && (
-                      <span className="updated">
-                        {t('updated')}：{formatDate(getUpdatedAt(word))}
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(word.id, word.original_text || word.japanese)}
-                    title={t('deleteWord')}
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+                  </td>
+                  <td className="col-translation">
+                    <span className="translation">{word.translation || word.chinese}</span>
+                  </td>
+                  <td className="col-example">
+                    <span className="example" title={word.example}>
+                      {word.example ? (
+                        word.example.length > 30
+                          ? word.example.substring(0, 30) + '...'
+                          : word.example
+                      ) : '-'}
+                    </span>
+                  </td>
+                  <td className="col-created">
+                    <span className="created-date">
+                      {formatDate(getCreatedAt(word))}
+                    </span>
+                  </td>
+                  <td className="col-actions">
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(word.id, word.original_text || word.japanese)}
+                      title={t('deleteWord')}
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
