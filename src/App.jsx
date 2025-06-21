@@ -4,6 +4,7 @@ import WordList from './components/WordList'
 import WordStats from './components/WordStats'
 import SupabaseSetup from './components/SupabaseSetup'
 import DebugPanel from './components/DebugPanel'
+import DataMigration from './components/DataMigration'
 import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
 
@@ -11,6 +12,7 @@ function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
+  const [showMigration, setShowMigration] = useState(false)
   const [isCloudConfigured, setIsCloudConfigured] = useState(false)
 
   useEffect(() => {
@@ -55,6 +57,14 @@ function App() {
             >
               {isCloudConfigured ? '🌐 雲端已連接' : '⚙️ 設置雲端同步'}
             </button>
+            {isCloudConfigured && (
+              <button
+                onClick={() => setShowMigration(true)}
+                className="migration-btn"
+              >
+                🔧 修復同步
+              </button>
+            )}
             <button
               onClick={() => setShowDebug(!showDebug)}
               className="debug-btn"
@@ -99,6 +109,11 @@ function App() {
           {isCloudConfigured ? '🌐 使用雲端存儲' : '💾 使用本地存儲'}
         </p>
       </footer>
+
+      {/* 數據遷移模態框 */}
+      {showMigration && (
+        <DataMigration onClose={() => setShowMigration(false)} />
+      )}
     </div>
   )
 }

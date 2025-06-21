@@ -1,0 +1,286 @@
+.migration-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.migration-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.migration-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 2px solid #e9ecef;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.migration-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.migration-progress {
+  padding: 20px 24px;
+  background: #f8f9fa;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50 0%, #81C784 100%);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.migration-content {
+  padding: 24px;
+}
+
+.step-info h3 {
+  margin: 0 0 12px 0;
+  color: #2e7d32;
+  font-size: 1.3rem;
+}
+
+.step-info p {
+  margin: 0 0 20px 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.step-details {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.problem-explanation h4,
+.sql-section h4,
+.completion-info h4 {
+  margin: 0 0 12px 0;
+  color: #2e7d32;
+  font-size: 1.1rem;
+}
+
+.problem-explanation ul,
+.completion-info ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.problem-explanation li,
+.completion-info li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.sql-container {
+  position: relative;
+  margin: 16px 0;
+}
+
+.sql-code {
+  background: #2d3748;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: #45a049;
+}
+
+.instructions {
+  margin-top: 20px;
+}
+
+.instructions ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.completion-info {
+  text-align: center;
+}
+
+.completion-info p {
+  margin-bottom: 16px;
+}
+
+.warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.migration-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+}
+
+.prev-btn,
+.next-btn,
+.complete-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.prev-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.prev-btn:hover {
+  background: #5a6268;
+}
+
+.next-btn,
+.complete-btn {
+  background: #4CAF50;
+  color: white;
+  margin-left: auto;
+}
+
+.next-btn:hover,
+.complete-btn:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.complete-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .migration-overlay {
+    padding: 10px;
+  }
+  
+  .migration-modal {
+    max-height: 95vh;
+  }
+  
+  .migration-header {
+    padding: 16px;
+  }
+  
+  .migration-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .migration-content {
+    padding: 16px;
+  }
+  
+  .sql-code {
+    font-size: 0.75rem;
+    padding: 16px;
+  }
+  
+  .migration-actions {
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .next-btn,
+  .complete-btn {
+    margin-left: 0;
+  }
+}

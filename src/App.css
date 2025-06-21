@@ -53,7 +53,8 @@
 }
 
 .setup-btn,
-.debug-btn {
+.debug-btn,
+.migration-btn {
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -67,7 +68,8 @@
 }
 
 .setup-btn:hover,
-.debug-btn:hover {
+.debug-btn:hover,
+.migration-btn:hover {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
@@ -86,6 +88,16 @@
 .debug-btn:hover {
   background: rgba(255, 193, 7, 0.3);
   border-color: rgba(255, 193, 7, 0.5);
+}
+
+.migration-btn {
+  background: rgba(255, 87, 34, 0.2);
+  border-color: rgba(255, 87, 34, 0.3);
+}
+
+.migration-btn:hover {
+  background: rgba(255, 87, 34, 0.3);
+  border-color: rgba(255, 87, 34, 0.5);
 }
 
 .app-main {

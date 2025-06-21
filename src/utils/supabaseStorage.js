@@ -28,23 +28,22 @@ const WORDS_TABLE = 'words'
 // 創建數據庫表的 SQL（用戶需要在 Supabase 控制台執行）
 export const getCreateTableSQL = () => {
   return `
--- 創建生詞表（簡化版本，不需要用戶認證）
+-- 創建生詞表（多設備共享版本）
 CREATE TABLE IF NOT EXISTS words (
   id BIGSERIAL PRIMARY KEY,
   japanese TEXT NOT NULL,
   reading TEXT,
   chinese TEXT NOT NULL,
   example TEXT,
-  device_id TEXT DEFAULT 'default',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 創建索引
-CREATE INDEX IF NOT EXISTS idx_words_device_id ON words(device_id);
 CREATE INDEX IF NOT EXISTS idx_words_updated_at ON words(updated_at DESC);
 CREATE INDEX IF NOT EXISTS idx_words_reading ON words(reading);
 CREATE INDEX IF NOT EXISTS idx_words_chinese ON words(chinese);
+CREATE INDEX IF NOT EXISTS idx_words_japanese ON words(japanese);
 
 -- 創建更新時間觸發器
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -60,8 +59,8 @@ CREATE TRIGGER update_words_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
--- 注意：這個版本沒有行級安全性，所有用戶可以看到所有數據
--- 如果需要數據隔離，請使用 device_id 來區分不同用戶的數據
+-- 注意：這個版本實現真正的多設備同步
+-- 所有使用相同 Supabase 配置的設備將共享同一份生詞數據
   `
 }
 
@@ -91,7 +90,6 @@ export const getAllWords = async () => {
     const { data, error } = await supabase
       .from(WORDS_TABLE)
       .select('*')
-      .eq('device_id', getDeviceId())
       .order('updated_at', { ascending: false })
 
     if (error) throw error
@@ -100,16 +98,6 @@ export const getAllWords = async () => {
     console.error('Error fetching words:', error)
     throw error
   }
-}
-
-// 獲取或創建設備ID
-const getDeviceId = () => {
-  let deviceId = localStorage.getItem('device_id')
-  if (!deviceId) {
-    deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
-    localStorage.setItem('device_id', deviceId)
-  }
-  return deviceId
 }
 
 // 添加新生詞
@@ -126,8 +114,7 @@ export const addWord = async (japanese, reading, chinese, example) => {
           japanese: japanese.trim(),
           reading: reading ? reading.trim() : null,
           chinese: chinese.trim(),
-          example: example ? example.trim() : null,
-          device_id: getDeviceId()
+          example: example ? example.trim() : null
         }
       ])
       .select()
@@ -200,7 +187,7 @@ export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => 
   }
 
   try {
-    let query = supabase.from(WORDS_TABLE).select('*').eq('device_id', getDeviceId())
+    let query = supabase.from(WORDS_TABLE).select('*')
 
     switch (sortOption) {
       case SORT_OPTIONS.UPDATED_ASC:

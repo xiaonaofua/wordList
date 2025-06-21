@@ -20,9 +20,8 @@ const DebugPanel = () => {
         const tableExists = await checkTableExists()
         info += `✅ 數據庫表狀態: ${tableExists ? '存在' : '不存在'}\n`
         
-        // 檢查設備ID
-        const deviceId = localStorage.getItem('device_id')
-        info += `✅ 設備ID: ${deviceId || '未生成'}\n`
+        // 檢查多設備同步狀態
+        info += `✅ 多設備同步: 已啟用\n`
         
         // 檢查本地配置
         const config = localStorage.getItem('supabase_config')
@@ -54,7 +53,6 @@ const DebugPanel = () => {
     if (window.confirm('確定要清除所有本地數據嗎？這將刪除本地存儲的生詞和配置。')) {
       localStorage.removeItem('japanese_word_list')
       localStorage.removeItem('supabase_config')
-      localStorage.removeItem('device_id')
       alert('本地數據已清除，請刷新頁面')
     }
   }
