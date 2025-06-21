@@ -1,10 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Supabase 配置
-// 注意：這些是公開的配置，用於演示目的
-// 在生產環境中，請使用環境變量來保護敏感信息
-const supabaseUrl = 'https://your-project-url.supabase.co'
-const supabaseAnonKey = 'your-anon-key'
+// 預配置的 Supabase 實例 - 用於用戶認證和詞彙管理
+// 這是一個公共實例，所有用戶共享，但通過 RLS 確保數據隔離
+const supabaseUrl = 'https://dcqhsrwojhpoynahkewp.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjcWhzcndvamhwb3luYWhrZXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1MTI2MjUsImV4cCI6MjA2NjA4ODYyNX0.0VEiKPawHosmoUqE3a_P0TENNmXYUBqHhDS1PA0yFL0'
 
 // 創建 Supabase 客戶端
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)

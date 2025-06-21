@@ -1,25 +1,13 @@
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
 
-// 動態創建 Supabase 客戶端
-let supabase = null
-let isConfigured = false
-
-// 初始化 Supabase 客戶端
-export const initializeSupabase = (config) => {
-  try {
-    supabase = createClient(config.url, config.anonKey)
-    isConfigured = true
-    return true
-  } catch (error) {
-    console.error('Failed to initialize Supabase:', error)
-    isConfigured = false
-    return false
-  }
+// 檢查是否已配置（现在总是返回 true，因为我们使用预配置的实例）
+export const isSupabaseConfigured = () => {
+  return true
 }
 
-// 檢查是否已配置
-export const isSupabaseConfigured = () => {
-  return isConfigured && supabase !== null
+// 初始化 Supabase 客戶端（现在不需要，但保持兼容性）
+export const initializeSupabase = (config) => {
+  return true
 }
 
 // 數據庫表名
@@ -28,9 +16,10 @@ const WORDS_TABLE = 'words'
 // 創建數據庫表的 SQL（用戶需要在 Supabase 控制台執行）
 export const getCreateTableSQL = () => {
   return `
--- 創建詞彙表（多設備共享版本）
+-- 創建詞彙表（用戶隔離版本）
 CREATE TABLE IF NOT EXISTS words (
   id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   original_text TEXT NOT NULL,
   pronunciation TEXT,
   translation TEXT NOT NULL,
@@ -40,10 +29,22 @@ CREATE TABLE IF NOT EXISTS words (
 );
 
 -- 創建索引
+CREATE INDEX IF NOT EXISTS idx_words_user_id ON words(user_id);
 CREATE INDEX IF NOT EXISTS idx_words_updated_at ON words(updated_at DESC);
 CREATE INDEX IF NOT EXISTS idx_words_pronunciation ON words(pronunciation);
 CREATE INDEX IF NOT EXISTS idx_words_translation ON words(translation);
 CREATE INDEX IF NOT EXISTS idx_words_original_text ON words(original_text);
+
+-- 啟用行級安全性
+ALTER TABLE words ENABLE ROW LEVEL SECURITY;
+
+-- 創建 RLS 策略：用戶只能訪問自己的詞彙
+CREATE POLICY "Users can only access their own words" ON words
+  FOR ALL USING (auth.uid() = user_id);
+
+-- 創建 RLS 策略：用戶只能插入自己的詞彙
+CREATE POLICY "Users can only insert their own words" ON words
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- 創建更新時間觸發器
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -80,12 +81,8 @@ export const checkTableExists = async () => {
   }
 }
 
-// 獲取所有詞彙
+// 獲取當前用戶的所有詞彙
 export const getAllWords = async () => {
-  if (!isSupabaseConfigured()) {
-    throw new Error('Supabase not configured')
-  }
-
   try {
     const { data, error } = await supabase
       .from(WORDS_TABLE)
@@ -100,17 +97,20 @@ export const getAllWords = async () => {
   }
 }
 
-// 添加新詞彙
+// 添加新詞彙（自動關聯到當前用戶）
 export const addWord = async (originalText, pronunciation, translation, example) => {
-  if (!isSupabaseConfigured()) {
-    throw new Error('Supabase not configured')
-  }
-
   try {
+    // 獲取當前用戶
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
+
     const { data, error } = await supabase
       .from(WORDS_TABLE)
       .insert([
         {
+          user_id: user.id,
           original_text: originalText.trim(),
           pronunciation: pronunciation ? pronunciation.trim() : null,
           translation: translation.trim(),

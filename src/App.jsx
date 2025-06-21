@@ -6,44 +6,47 @@ import SupabaseSetup from './components/SupabaseSetup'
 import DebugPanel from './components/DebugPanel'
 import DataMigration from './components/DataMigration'
 import LanguageSelector from './components/LanguageSelector'
+import Auth from './components/Auth'
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
 
 // 主應用組件（內部）
 const AppContent = () => {
   const { t } = useLanguage()
+  const { user, loading, signOut } = useAuth()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
   const [showMigration, setShowMigration] = useState(false)
-  const [isCloudConfigured, setIsCloudConfigured] = useState(false)
+  const [isCloudConfigured, setIsCloudConfigured] = useState(true) // 现在默认已配置
 
-  useEffect(() => {
-    // 檢查是否已配置 Supabase
-    const savedConfig = localStorage.getItem('supabase_config')
-    if (savedConfig) {
-      try {
-        const config = JSON.parse(savedConfig)
-        const success = initializeSupabase(config)
-        setIsCloudConfigured(success)
-      } catch (error) {
-        console.error('Failed to load Supabase config:', error)
-      }
-    }
-  }, [])
+  // 如果正在加载认证状态，显示加载界面
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>{t('loading') || '加载中...'}</p>
+      </div>
+    )
+  }
 
-  // 當添加新生詞時觸發列表刷新
+  // 如果用户未登录，显示登录界面
+  if (!user) {
+    return <Auth />
+  }
+
+  // 當添加新詞彙時觸發列表刷新
   const handleWordAdded = () => {
     setRefreshTrigger(prev => prev + 1)
   }
 
-  // 處理 Supabase 配置完成
-  const handleSupabaseConfigured = (config) => {
-    const success = initializeSupabase(config)
-    setIsCloudConfigured(success)
-    setShowSetup(false)
-    setRefreshTrigger(prev => prev + 1) // 刷新列表以加載雲端數據
+  // 處理登出
+  const handleSignOut = async () => {
+    if (window.confirm(t('confirmLogout') || '确定要退出登录吗？')) {
+      await signOut()
+    }
   }
 
   return (
@@ -56,20 +59,17 @@ const AppContent = () => {
           </div>
           <div className="header-actions">
             <LanguageSelector />
-            <button
-              onClick={() => setShowSetup(!showSetup)}
-              className={`setup-btn ${isCloudConfigured ? 'configured' : ''}`}
-            >
-              {isCloudConfigured ? `🌐 ${t('cloudConnected')}` : `⚙️ ${t('setupCloudSync')}`}
-            </button>
-            {isCloudConfigured && (
+            <div className="user-info">
+              <span className="welcome-text">
+                {t('welcome') || '欢迎'}, {user?.user_metadata?.username || user?.email}
+              </span>
               <button
-                onClick={() => setShowMigration(true)}
-                className="migration-btn"
+                onClick={handleSignOut}
+                className="logout-btn"
               >
-                🔧 {t('fixSync')}
+                🚪 {t('logout')}
               </button>
-            )}
+            </div>
             <button
               onClick={() => setShowDebug(!showDebug)}
               className="debug-btn"
@@ -82,21 +82,6 @@ const AppContent = () => {
 
       <main className="app-main">
         {showDebug && <DebugPanel />}
-
-        {showSetup && (
-          <SupabaseSetup onConfigured={handleSupabaseConfigured} />
-        )}
-
-        {isCloudConfigured && (
-          <div className="setup-instructions">
-            <h3>📋 數據庫設置說明</h3>
-            <p>請在您的 Supabase 項目中執行以下 SQL 來創建必要的表結構：</p>
-            <details>
-              <summary>點擊查看 SQL 代碼</summary>
-              <pre className="sql-code">{getCreateTableSQL()}</pre>
-            </details>
-          </div>
-        )}
 
         {/* 添加新詞彙表單 - 最頂部位置 */}
         <WordForm onWordAdded={handleWordAdded} />
@@ -115,10 +100,7 @@ const AppContent = () => {
         </p>
       </footer>
 
-      {/* 數據遷移模態框 */}
-      {showMigration && (
-        <DataMigration onClose={() => setShowMigration(false)} />
-      )}
+
     </div>
   )
 }
@@ -127,7 +109,9 @@ const AppContent = () => {
 function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </LanguageProvider>
   )
 }
