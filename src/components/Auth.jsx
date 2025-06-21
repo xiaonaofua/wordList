@@ -43,18 +43,23 @@ const Auth = () => {
       return
     }
 
+    if (!formData.username.trim()) {
+      setError(t('enterUsername') || '请输入用户名')
+      return
+    }
+
     setLoading(true)
     setError('')
-    
-    const { success, error } = await sendVerificationCode(formData.email)
-    
+
+    const { success, error, message } = await sendVerificationCode(formData.email, formData.username)
+
     if (success) {
-      setSuccess(t('verificationCodeSent') || '验证码已发送到您的邮箱')
+      setSuccess(message || t('verificationCodeSent') || '验证码已发送到您的邮箱')
       setMode('verify')
     } else {
-      setError(error?.message || t('sendCodeError') || '发送验证码失败')
+      setError(error || t('sendCodeError') || '发送验证码失败')
     }
-    
+
     setLoading(false)
   }
 
