@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getAllWords } from '../utils/wordStorage';
+import { useLanguage } from '../utils/i18n';
 import './WordStats.css';
 
 const WordStats = ({ refreshTrigger }) => {
+  const { t } = useLanguage();
   const [stats, setStats] = useState({
     totalWords: 0,
     monthlyStats: [],
@@ -86,33 +88,33 @@ const WordStats = ({ refreshTrigger }) => {
 
   return (
     <div className="word-stats">
-      <h2>📊 學習統計</h2>
-      
+      <h2>📊 {t('learningStats')}</h2>
+
       <div className="stats-grid">
         <div className="stat-card total">
           <div className="stat-number">{stats.totalWords}</div>
-          <div className="stat-label">總掌握詞彙</div>
+          <div className="stat-label">{t('totalWords')}</div>
         </div>
-        
+
         <div className="stat-card today">
           <div className="stat-number">{stats.todayWords}</div>
-          <div className="stat-label">今日新增</div>
+          <div className="stat-label">{t('todayAdded')}</div>
         </div>
-        
+
         <div className="stat-card week">
           <div className="stat-number">{stats.thisWeekWords}</div>
-          <div className="stat-label">本週新增</div>
+          <div className="stat-label">{t('weekAdded')}</div>
         </div>
-        
+
         <div className="stat-card month">
           <div className="stat-number">{stats.thisMonthWords}</div>
-          <div className="stat-label">本月新增</div>
+          <div className="stat-label">{t('monthAdded')}</div>
         </div>
       </div>
-      
+
       {stats.monthlyStats.length > 0 && (
         <div className="monthly-stats">
-          <h3>📈 每月學習記錄</h3>
+          <h3>📈 {t('monthlyProgress')}</h3>
           <div className="monthly-chart">
             {stats.monthlyStats.map(({ month, count }) => (
               <div key={month} className="month-bar">

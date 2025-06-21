@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getAllWords, deleteWord } from '../utils/wordStorage';
+import { useLanguage } from '../utils/i18n';
 import './WordList.css';
 
 const WordList = ({ refreshTrigger }) => {
+  const { t } = useLanguage();
   const [words, setWords] = useState([]);
 
   // 加載生詞列表（按最新時間排序）
@@ -12,7 +14,7 @@ const WordList = ({ refreshTrigger }) => {
       setWords(allWords);
     } catch (error) {
       console.error('Error loading words:', error);
-      alert('加載生詞列表時發生錯誤：' + (error.message || '未知錯誤'));
+      alert(t('loadWordsError') + '：' + (error.message || '未知錯誤'));
     }
   };
 
@@ -21,15 +23,15 @@ const WordList = ({ refreshTrigger }) => {
     loadWords();
   }, [refreshTrigger]);
 
-  // 處理刪除生詞
+  // 處理刪除詞彙
   const handleDelete = async (id, japanese) => {
-    if (window.confirm(`確定要刪除生詞「${japanese}」嗎？`)) {
+    if (window.confirm(`${t('deleteWordConfirm')}「${japanese}」嗎？`)) {
       try {
         await deleteWord(id);
         loadWords(); // 重新加載列表
       } catch (error) {
         console.error('Error deleting word:', error);
-        alert('刪除生詞時發生錯誤：' + (error.message || '未知錯誤'));
+        alert(t('deleteWordError') + '：' + (error.message || '未知錯誤'));
       }
     }
   };
@@ -53,13 +55,13 @@ const WordList = ({ refreshTrigger }) => {
   return (
     <div className="word-list-container">
       <div className="word-list-header">
-        <h2>📚 最新生詞 ({words.length} 個)</h2>
+        <h2>📚 {t('latestWords')} ({words.length} {t('wordsCount')})</h2>
       </div>
 
       {words.length === 0 ? (
         <div className="empty-state">
-          <p>還沒有添加任何生詞</p>
-          <p>請使用上方的表單添加您的第一個生詞</p>
+          <p>{t('noWords')}</p>
+          <p>{t('noWordsSubtext')}</p>
         </div>
       ) : (
         <div className="word-list">
@@ -85,18 +87,18 @@ const WordList = ({ refreshTrigger }) => {
                 <div className="word-meta">
                   <div className="timestamps">
                     <span className="created">
-                      創建：{formatDate(getCreatedAt(word))}
+                      {t('created')}：{formatDate(getCreatedAt(word))}
                     </span>
                     {getUpdatedAt(word) !== getCreatedAt(word) && (
                       <span className="updated">
-                        更新：{formatDate(getUpdatedAt(word))}
+                        {t('updated')}：{formatDate(getUpdatedAt(word))}
                       </span>
                     )}
                   </div>
-                  <button 
+                  <button
                     className="delete-btn"
                     onClick={() => handleDelete(word.id, word.japanese)}
-                    title="刪除此生詞"
+                    title={t('deleteWord')}
                   >
                     🗑️
                   </button>

@@ -5,10 +5,13 @@ import WordStats from './components/WordStats'
 import SupabaseSetup from './components/SupabaseSetup'
 import DebugPanel from './components/DebugPanel'
 import DataMigration from './components/DataMigration'
+import LanguageSelector from './components/LanguageSelector'
+import { useLanguage } from './utils/i18n'
 import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
 
 function App() {
+  const { t } = useLanguage()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
@@ -47,29 +50,30 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-text">
-            <h1>📚 日文生詞本</h1>
-            <p>記錄和管理您的日文學習詞彙</p>
+            <h1>📚 {t('appTitle')}</h1>
+            <p>{t('appSubtitle')}</p>
           </div>
           <div className="header-actions">
+            <LanguageSelector />
             <button
               onClick={() => setShowSetup(!showSetup)}
               className={`setup-btn ${isCloudConfigured ? 'configured' : ''}`}
             >
-              {isCloudConfigured ? '🌐 雲端已連接' : '⚙️ 設置雲端同步'}
+              {isCloudConfigured ? `🌐 ${t('cloudConnected')}` : `⚙️ ${t('setupCloudSync')}`}
             </button>
             {isCloudConfigured && (
               <button
                 onClick={() => setShowMigration(true)}
                 className="migration-btn"
               >
-                🔧 修復同步
+                🔧 {t('fixSync')}
               </button>
             )}
             <button
               onClick={() => setShowDebug(!showDebug)}
               className="debug-btn"
             >
-              🛠️ 調試
+              🛠️ {t('debug')}
             </button>
           </div>
         </div>
@@ -104,9 +108,9 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>© 2024 日文生詞本 - 讓日文學習更簡單</p>
+        <p>© 2024 {t('footerText')}</p>
         <p className="storage-info">
-          {isCloudConfigured ? '🌐 使用雲端存儲' : '💾 使用本地存儲'}
+          {isCloudConfigured ? `🌐 ${t('cloudStorage')}` : `💾 ${t('localStorage')}`}
         </p>
       </footer>
 

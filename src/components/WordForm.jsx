@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { addWord } from '../utils/wordStorage';
+import { useLanguage } from '../utils/i18n';
 import './WordForm.css';
 
 const WordForm = ({ onWordAdded }) => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     japanese: '',
     reading: '',
@@ -25,7 +27,7 @@ const WordForm = ({ onWordAdded }) => {
 
     // 驗證必填字段
     if (!formData.japanese.trim() || !formData.chinese.trim()) {
-      alert('請填寫日文和中文翻譯');
+      alert(t('fillRequired'));
       return;
     }
 
@@ -52,10 +54,10 @@ const WordForm = ({ onWordAdded }) => {
         onWordAdded(newWord);
       }
 
-      alert('生詞添加成功！');
+      alert(t('wordAddSuccess'));
     } catch (error) {
       console.error('Error adding word:', error);
-      alert('添加生詞時發生錯誤：' + (error.message || '未知錯誤'));
+      alert(t('wordAddError') + '：' + (error.message || '未知錯誤'));
     } finally {
       setIsSubmitting(false);
     }
@@ -72,11 +74,11 @@ const WordForm = ({ onWordAdded }) => {
 
   return (
     <div className="word-form-container">
-      <h2>添加新生詞</h2>
+      <h2>{t('addNewWord')}</h2>
       <form onSubmit={handleSubmit} className="word-form">
         <div className="form-group">
           <label htmlFor="japanese">
-            日文 <span className="required">*</span>
+            {t('originalText')} <span className="required">{t('required')}</span>
           </label>
           <input
             type="text"
@@ -84,14 +86,14 @@ const WordForm = ({ onWordAdded }) => {
             name="japanese"
             value={formData.japanese}
             onChange={handleChange}
-            placeholder="請輸入日文單詞"
+            placeholder={t('originalPlaceholder')}
             required
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="reading">
-            讀音
+            {t('pronunciation')}
           </label>
           <input
             type="text"
@@ -99,13 +101,13 @@ const WordForm = ({ onWordAdded }) => {
             name="reading"
             value={formData.reading}
             onChange={handleChange}
-            placeholder="請輸入假名讀音（可選）"
+            placeholder={t('pronunciationPlaceholder')}
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="chinese">
-            中文翻譯 <span className="required">*</span>
+            {t('translation')} <span className="required">{t('required')}</span>
           </label>
           <input
             type="text"
@@ -113,38 +115,38 @@ const WordForm = ({ onWordAdded }) => {
             name="chinese"
             value={formData.chinese}
             onChange={handleChange}
-            placeholder="請輸入中文翻譯"
+            placeholder={t('translationPlaceholder')}
             required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="example">例句</label>
+          <label htmlFor="example">{t('example')}</label>
           <textarea
             id="example"
             name="example"
             value={formData.example}
             onChange={handleChange}
-            placeholder="請輸入例句（可選）"
+            placeholder={t('examplePlaceholder')}
             rows="3"
           />
         </div>
 
         <div className="form-actions">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-btn"
             disabled={isSubmitting}
           >
-            {isSubmitting ? '添加中...' : '添加生詞'}
+            {isSubmitting ? t('adding') : t('addWord')}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="reset-btn"
             onClick={handleReset}
             disabled={isSubmitting}
           >
-            清空
+            {t('clear')}
           </button>
         </div>
       </form>
