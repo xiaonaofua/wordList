@@ -6,9 +6,9 @@ import './WordForm.css';
 const WordForm = ({ onWordAdded }) => {
   const { t } = useLanguage();
   const [formData, setFormData] = useState({
-    japanese: '',
-    reading: '',
-    chinese: '',
+    originalText: '',
+    pronunciation: '',
+    translation: '',
     example: ''
   });
 
@@ -26,7 +26,7 @@ const WordForm = ({ onWordAdded }) => {
     e.preventDefault();
 
     // 驗證必填字段
-    if (!formData.japanese.trim() || !formData.chinese.trim()) {
+    if (!formData.originalText.trim() || !formData.translation.trim()) {
       alert(t('fillRequired'));
       return;
     }
@@ -35,17 +35,17 @@ const WordForm = ({ onWordAdded }) => {
 
     try {
       const newWord = await addWord(
-        formData.japanese,
-        formData.reading,
-        formData.chinese,
+        formData.originalText,
+        formData.pronunciation,
+        formData.translation,
         formData.example
       );
 
       // 清空表單
       setFormData({
-        japanese: '',
-        reading: '',
-        chinese: '',
+        originalText: '',
+        pronunciation: '',
+        translation: '',
         example: ''
       });
 
@@ -65,9 +65,9 @@ const WordForm = ({ onWordAdded }) => {
 
   const handleReset = () => {
     setFormData({
-      japanese: '',
-      reading: '',
-      chinese: '',
+      originalText: '',
+      pronunciation: '',
+      translation: '',
       example: ''
     });
   };
@@ -77,14 +77,14 @@ const WordForm = ({ onWordAdded }) => {
       <h2>{t('addNewWord')}</h2>
       <form onSubmit={handleSubmit} className="word-form">
         <div className="form-group">
-          <label htmlFor="japanese">
+          <label htmlFor="originalText">
             {t('originalText')} <span className="required">{t('required')}</span>
           </label>
           <input
             type="text"
-            id="japanese"
-            name="japanese"
-            value={formData.japanese}
+            id="originalText"
+            name="originalText"
+            value={formData.originalText}
             onChange={handleChange}
             placeholder={t('originalPlaceholder')}
             required
@@ -92,28 +92,28 @@ const WordForm = ({ onWordAdded }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="reading">
+          <label htmlFor="pronunciation">
             {t('pronunciation')}
           </label>
           <input
             type="text"
-            id="reading"
-            name="reading"
-            value={formData.reading}
+            id="pronunciation"
+            name="pronunciation"
+            value={formData.pronunciation}
             onChange={handleChange}
             placeholder={t('pronunciationPlaceholder')}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="chinese">
+          <label htmlFor="translation">
             {t('translation')} <span className="required">{t('required')}</span>
           </label>
           <input
             type="text"
-            id="chinese"
-            name="chinese"
-            value={formData.chinese}
+            id="translation"
+            name="translation"
+            value={formData.translation}
             onChange={handleChange}
             placeholder={t('translationPlaceholder')}
             required

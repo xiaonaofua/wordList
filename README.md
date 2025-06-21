@@ -1,6 +1,6 @@
-# 📚 日文生詞本 (Japanese Vocabulary App)
+# 📚 多語言生詞本 (Multilingual Vocabulary App)
 
-> 一個現代化的日文學習詞彙管理應用，支持雲端同步和學習統計分析
+> 一個現代化的多語言學習詞彙管理應用，支持雲端同步和學習統計分析
 
 ## 🌐 在線體驗
 
@@ -9,9 +9,9 @@
 ## 🌟 功能特點
 
 ### 📝 詞彙管理
-- **日文單詞錄入**：支持漢字、假名等日文字符
-- **讀音記錄**：可選的假名讀音輸入
-- **中文翻譯**：準確的中文對照翻譯
+- **多語言支持**：支持任何語言的詞彙學習
+- **發音記錄**：可選的發音或音標輸入
+- **翻譯功能**：準確的翻譯或解釋記錄
 - **例句支持**：豐富的使用場景示例
 - **智能驗證**：自動檢查必填字段
 
@@ -27,9 +27,14 @@
 - **離線支持**：網絡不可用時自動使用本地存儲
 - **數據安全**：基於 Supabase 的企業級數據保護
 
+### 🌍 多語言界面
+- **界面語言**：支持英文和中文界面切換
+- **語言學習**：適用於任何語言的詞彙學習
+- **本地化**：完整的界面翻譯和本地化支持
+
 ### 📱 用戶體驗
 - **響應式設計**：完美適配各種屏幕尺寸
-- **直觀界面**：生詞列表置於最醒目位置
+- **直觀界面**：詞彙列表置於最醒目位置
 - **快速操作**：一鍵添加、刪除、查看
 - **智能布局**：統計信息、詞彙列表、添加表單的合理排列
 
@@ -67,7 +72,7 @@
 ## 🔧 解決的關鍵問題
 
 ### 1. 多設備同步問題 ✅
-**問題描述**：初始版本使用 `device_id` 隔離不同設備的數據，導致每個設備只能看到自己添加的生詞，無法實現真正的多設備同步。
+**問題描述**：初始版本使用 `device_id` 隔離不同設備的數據，導致每個設備只能看到自己添加的詞彙，無法實現真正的多設備同步。
 
 **解決方案**：
 - 移除 `device_id` 字段限制
@@ -75,25 +80,34 @@
 - 實現真正的跨設備實時同步
 - 提供數據遷移向導幫助用戶升級
 
-### 2. 用戶體驗優化 ✅
-**問題描述**：原始界面布局不夠直觀，用戶需要滾動才能看到最新的生詞。
+### 2. 語言通用性改進 ✅
+**問題描述**：應用最初專為日文學習設計，字段名和界面文字都帶有日文特定性，限制了其他語言的使用。
 
 **解決方案**：
-- 重新設計界面布局，將生詞列表置於最醒目位置
+- 將數據庫字段從 `japanese/reading/chinese` 改為 `original_text/pronunciation/translation`
+- 移除所有日文特定的術語和描述
+- 實現完整的多語言界面支持（英文/中文）
+- 添加語言選擇器，支持界面語言切換
+
+### 3. 用戶體驗優化 ✅
+**問題描述**：原始界面布局不夠直觀，用戶需要滾動才能看到最新的詞彙。
+
+**解決方案**：
+- 重新設計界面布局，將詞彙列表置於最醒目位置
 - 移除複雜的排序功能，默認按最新時間顯示
 - 添加學習統計面板，一眼看到學習進度
 - 優化響應式設計，提升移動端體驗
 
-### 3. 數據靈活性改進 ✅
-**問題描述**：讀音字段為必填項，但很多情況下用戶可能不需要或不知道讀音。
+### 4. 數據靈活性改進 ✅
+**問題描述**：發音字段為必填項，但很多情況下用戶可能不需要或不知道發音。
 
 **解決方案**：
-- 將讀音字段改為可選輸入
-- 動態顯示邏輯，有讀音時才顯示括號
-- 更新數據庫表結構支持可選讀音
+- 將發音字段改為可選輸入
+- 動態顯示邏輯，有發音時才顯示括號
+- 更新數據庫表結構支持可選發音
 - 保持向後兼容性
 
-### 4. 學習動機增強 ✅
+### 5. 學習動機增強 ✅
 **問題描述**：缺乏學習進度的可視化展示，用戶難以感受到學習成果。
 
 **解決方案**：
@@ -102,7 +116,7 @@
 - 提供今日、本週、本月的學習數據
 - 激勵用戶持續學習
 
-### 5. 開發和部署自動化 ✅
+### 6. 開發和部署自動化 ✅
 **問題描述**：手動部署流程複雜，容易出錯。
 
 **解決方案**：
@@ -164,12 +178,12 @@ npm run deploy
 在 Supabase SQL Editor 中執行以下 SQL：
 
 ```sql
--- 創建生詞表
+-- 創建詞彙表
 CREATE TABLE words (
   id BIGSERIAL PRIMARY KEY,
-  japanese TEXT NOT NULL,
-  reading TEXT,
-  chinese TEXT NOT NULL,
+  original_text TEXT NOT NULL,
+  pronunciation TEXT,
+  translation TEXT NOT NULL,
   example TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -177,9 +191,9 @@ CREATE TABLE words (
 
 -- 創建索引
 CREATE INDEX idx_words_updated_at ON words(updated_at DESC);
-CREATE INDEX idx_words_reading ON words(reading);
-CREATE INDEX idx_words_chinese ON words(chinese);
-CREATE INDEX idx_words_japanese ON words(japanese);
+CREATE INDEX idx_words_pronunciation ON words(pronunciation);
+CREATE INDEX idx_words_translation ON words(translation);
+CREATE INDEX idx_words_original_text ON words(original_text);
 
 -- 創建更新時間觸發器
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -199,10 +213,10 @@ CREATE TRIGGER update_words_updated_at
 ## 📖 使用指南
 
 ### 基本操作
-1. **添加生詞**：使用底部表單輸入日文和中文翻譯（讀音和例句可選）
+1. **添加詞彙**：使用底部表單輸入原文和翻譯（發音和例句可選）
 2. **查看統計**：頂部顯示學習進度和詞彙統計
-3. **瀏覽詞彙**：中間區域顯示最新添加的生詞列表
-4. **刪除生詞**：點擊生詞卡片右下角的垃圾桶圖標
+3. **瀏覽詞彙**：中間區域顯示最新添加的詞彙列表
+4. **刪除詞彙**：點擊詞彙卡片右下角的垃圾桶圖標
 
 ### 多設備同步
 1. 在所有設備上使用相同的 Supabase 配置
@@ -263,7 +277,7 @@ MIT License - 詳見 [LICENSE](LICENSE) 文件
 
 - 感謝 [Supabase](https://supabase.com) 提供優秀的後端服務
 - 感謝 [Vite](https://vitejs.dev) 提供快速的構建工具
-- 感謝所有為日文學習做出貢獻的開發者和用戶
+- 感謝所有為語言學習做出貢獻的開發者和用戶
 
 ## 📞 聯繫方式
 
@@ -272,4 +286,4 @@ MIT License - 詳見 [LICENSE](LICENSE) 文件
 
 ---
 
-**開始您的日文學習之旅：** [https://co2sou.github.io/wordList/](https://co2sou.github.io/wordList/) 📚✨
+**開始您的多語言學習之旅：** [https://co2sou.github.io/wordList/](https://co2sou.github.io/wordList/) 📚✨

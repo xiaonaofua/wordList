@@ -24,8 +24,8 @@ const WordList = ({ refreshTrigger }) => {
   }, [refreshTrigger]);
 
   // 處理刪除詞彙
-  const handleDelete = async (id, japanese) => {
-    if (window.confirm(`${t('deleteWordConfirm')}「${japanese}」嗎？`)) {
+  const handleDelete = async (id, originalText) => {
+    if (window.confirm(`${t('deleteWordConfirm')}「${originalText}」嗎？`)) {
       try {
         await deleteWord(id);
         loadWords(); // 重新加載列表
@@ -69,13 +69,13 @@ const WordList = ({ refreshTrigger }) => {
             <div key={word.id} className="word-item">
               <div className="word-content">
                 <div className="word-main">
-                  <div className="japanese-section">
-                    <span className="japanese">{word.japanese}</span>
-                    {word.reading && (
-                      <span className="reading">({word.reading})</span>
+                  <div className="original-section">
+                    <span className="original-text">{word.original_text || word.japanese}</span>
+                    {(word.pronunciation || word.reading) && (
+                      <span className="pronunciation">({word.pronunciation || word.reading})</span>
                     )}
                   </div>
-                  <div className="chinese">{word.chinese}</div>
+                  <div className="translation">{word.translation || word.chinese}</div>
                 </div>
                 
                 {word.example && (
@@ -97,7 +97,7 @@ const WordList = ({ refreshTrigger }) => {
                   </div>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(word.id, word.japanese)}
+                    onClick={() => handleDelete(word.id, word.original_text || word.japanese)}
                     title={t('deleteWord')}
                   >
                     🗑️

@@ -28,12 +28,12 @@ const WORDS_TABLE = 'words'
 // 創建數據庫表的 SQL（用戶需要在 Supabase 控制台執行）
 export const getCreateTableSQL = () => {
   return `
--- 創建生詞表（多設備共享版本）
+-- 創建詞彙表（多設備共享版本）
 CREATE TABLE IF NOT EXISTS words (
   id BIGSERIAL PRIMARY KEY,
-  japanese TEXT NOT NULL,
-  reading TEXT,
-  chinese TEXT NOT NULL,
+  original_text TEXT NOT NULL,
+  pronunciation TEXT,
+  translation TEXT NOT NULL,
   example TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS words (
 
 -- 創建索引
 CREATE INDEX IF NOT EXISTS idx_words_updated_at ON words(updated_at DESC);
-CREATE INDEX IF NOT EXISTS idx_words_reading ON words(reading);
-CREATE INDEX IF NOT EXISTS idx_words_chinese ON words(chinese);
-CREATE INDEX IF NOT EXISTS idx_words_japanese ON words(japanese);
+CREATE INDEX IF NOT EXISTS idx_words_pronunciation ON words(pronunciation);
+CREATE INDEX IF NOT EXISTS idx_words_translation ON words(translation);
+CREATE INDEX IF NOT EXISTS idx_words_original_text ON words(original_text);
 
 -- 創建更新時間觸發器
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -60,7 +60,7 @@ CREATE TRIGGER update_words_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 -- 注意：這個版本實現真正的多設備同步
--- 所有使用相同 Supabase 配置的設備將共享同一份生詞數據
+-- 所有使用相同 Supabase 配置的設備將共享同一份詞彙數據
   `
 }
 
@@ -80,7 +80,7 @@ export const checkTableExists = async () => {
   }
 }
 
-// 獲取所有生詞
+// 獲取所有詞彙
 export const getAllWords = async () => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
@@ -100,8 +100,8 @@ export const getAllWords = async () => {
   }
 }
 
-// 添加新生詞
-export const addWord = async (japanese, reading, chinese, example) => {
+// 添加新詞彙
+export const addWord = async (originalText, pronunciation, translation, example) => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
@@ -111,9 +111,9 @@ export const addWord = async (japanese, reading, chinese, example) => {
       .from(WORDS_TABLE)
       .insert([
         {
-          japanese: japanese.trim(),
-          reading: reading ? reading.trim() : null,
-          chinese: chinese.trim(),
+          original_text: originalText.trim(),
+          pronunciation: pronunciation ? pronunciation.trim() : null,
+          translation: translation.trim(),
           example: example ? example.trim() : null
         }
       ])
@@ -128,7 +128,7 @@ export const addWord = async (japanese, reading, chinese, example) => {
   }
 }
 
-// 更新生詞
+// 更新詞彙
 export const updateWord = async (id, updates) => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
@@ -150,7 +150,7 @@ export const updateWord = async (id, updates) => {
   }
 }
 
-// 刪除生詞
+// 刪除詞彙
 export const deleteWord = async (id) => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
@@ -180,7 +180,7 @@ export const SORT_OPTIONS = {
   CHINESE_DESC: 'chinese_desc'
 }
 
-// 獲取排序後的生詞列表
+// 獲取排序後的詞彙列表
 export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
@@ -194,16 +194,16 @@ export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => 
         query = query.order('updated_at', { ascending: true })
         break
       case SORT_OPTIONS.READING_ASC:
-        query = query.order('reading', { ascending: true })
+        query = query.order('pronunciation', { ascending: true })
         break
       case SORT_OPTIONS.READING_DESC:
-        query = query.order('reading', { ascending: false })
+        query = query.order('pronunciation', { ascending: false })
         break
       case SORT_OPTIONS.CHINESE_ASC:
-        query = query.order('chinese', { ascending: true })
+        query = query.order('translation', { ascending: true })
         break
       case SORT_OPTIONS.CHINESE_DESC:
-        query = query.order('chinese', { ascending: false })
+        query = query.order('translation', { ascending: false })
         break
       case SORT_OPTIONS.UPDATED_DESC:
       default:

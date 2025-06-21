@@ -50,8 +50,9 @@ const DebugPanel = () => {
   }
 
   const clearLocalData = () => {
-    if (window.confirm('確定要清除所有本地數據嗎？這將刪除本地存儲的生詞和配置。')) {
-      localStorage.removeItem('japanese_word_list')
+    if (window.confirm('確定要清除所有本地數據嗎？這將刪除本地存儲的詞彙和配置。')) {
+      localStorage.removeItem('vocabulary_list')
+      localStorage.removeItem('japanese_word_list') // 兼容舊版本
       localStorage.removeItem('supabase_config')
       alert('本地數據已清除，請刷新頁面')
     }
@@ -62,7 +63,7 @@ const DebugPanel = () => {
     try {
       const { getAllWords } = await import('../utils/wordStorage')
       const words = await getAllWords()
-      setDebugInfo(`🔗 連接測試成功！\n找到 ${words.length} 個生詞`)
+      setDebugInfo(`🔗 連接測試成功！\n找到 ${words.length} 個詞彙`)
     } catch (error) {
       setDebugInfo(`❌ 連接測試失敗: ${error.message}`)
     }

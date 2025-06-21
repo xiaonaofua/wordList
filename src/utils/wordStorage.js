@@ -7,21 +7,21 @@ const useCloudStorage = () => {
   return supabaseStorage.isSupabaseConfigured()
 }
 
-// 生詞數據結構（本地存儲用）
-export const createWord = (japanese, reading, chinese, example) => {
+// 詞彙數據結構（本地存儲用）
+export const createWord = (originalText, pronunciation, translation, example) => {
   const now = new Date().toISOString();
   return {
     id: Date.now() + Math.random(), // 簡單的ID生成
-    japanese: japanese.trim(),
-    reading: reading.trim(),
-    chinese: chinese.trim(),
-    example: example.trim(),
+    original_text: originalText.trim(),
+    pronunciation: pronunciation ? pronunciation.trim() : '',
+    translation: translation.trim(),
+    example: example ? example.trim() : '',
     createdAt: now,
     updatedAt: now
   };
 };
 
-// 獲取所有生詞
+// 獲取所有詞彙
 export const getAllWords = async () => {
   try {
     if (useCloudStorage()) {
@@ -36,22 +36,22 @@ export const getAllWords = async () => {
   }
 };
 
-// 添加新生詞
-export const addWord = async (japanese, reading, chinese, example) => {
+// 添加新詞彙
+export const addWord = async (originalText, pronunciation, translation, example) => {
   try {
     if (useCloudStorage()) {
-      return await supabaseStorage.addWord(japanese, reading, chinese, example)
+      return await supabaseStorage.addWord(originalText, pronunciation, translation, example)
     } else {
-      return localStorage.addWord(japanese, reading, chinese, example)
+      return localStorage.addWord(originalText, pronunciation, translation, example)
     }
   } catch (error) {
     console.error('Error adding word:', error)
     // 如果雲端失敗，回退到本地存儲
-    return localStorage.addWord(japanese, reading, chinese, example)
+    return localStorage.addWord(originalText, pronunciation, translation, example)
   }
 };
 
-// 更新生詞
+// 更新詞彙
 export const updateWord = async (id, updates) => {
   try {
     if (useCloudStorage()) {
@@ -66,7 +66,7 @@ export const updateWord = async (id, updates) => {
   }
 };
 
-// 刪除生詞
+// 刪除詞彙
 export const deleteWord = async (id) => {
   try {
     if (useCloudStorage()) {
@@ -91,7 +91,7 @@ export const SORT_OPTIONS = {
   CHINESE_DESC: 'chinese_desc'  // 中文降序
 };
 
-// 獲取排序後的生詞列表
+// 獲取排序後的詞彙列表
 export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => {
   try {
     if (useCloudStorage()) {

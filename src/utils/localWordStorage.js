@@ -1,13 +1,13 @@
 // 本地存儲管理（原有的 localStorage 邏輯）
 
-// 生詞數據結構
-export const createWord = (japanese, reading, chinese, example) => {
+// 詞彙數據結構
+export const createWord = (originalText, pronunciation, translation, example) => {
   const now = new Date().toISOString();
   return {
     id: Date.now() + Math.random(), // 簡單的ID生成
-    japanese: japanese.trim(),
-    reading: reading ? reading.trim() : '',
-    chinese: chinese.trim(),
+    original_text: originalText.trim(),
+    pronunciation: pronunciation ? pronunciation.trim() : '',
+    translation: translation.trim(),
     example: example ? example.trim() : '',
     createdAt: now,
     updatedAt: now
@@ -15,9 +15,9 @@ export const createWord = (japanese, reading, chinese, example) => {
 };
 
 // 本地存儲鍵名
-const STORAGE_KEY = 'japanese_word_list';
+const STORAGE_KEY = 'vocabulary_list';
 
-// 獲取所有生詞
+// 獲取所有詞彙
 export const getAllWords = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -28,7 +28,7 @@ export const getAllWords = () => {
   }
 };
 
-// 保存所有生詞
+// 保存所有詞彙
 export const saveAllWords = (words) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(words));
@@ -39,16 +39,16 @@ export const saveAllWords = (words) => {
   }
 };
 
-// 添加新生詞
-export const addWord = (japanese, reading, chinese, example) => {
+// 添加新詞彙
+export const addWord = (originalText, pronunciation, translation, example) => {
   const words = getAllWords();
-  const newWord = createWord(japanese, reading, chinese, example);
+  const newWord = createWord(originalText, pronunciation, translation, example);
   words.push(newWord);
   saveAllWords(words);
   return newWord;
 };
 
-// 更新生詞
+// 更新詞彙
 export const updateWord = (id, updates) => {
   const words = getAllWords();
   const index = words.findIndex(word => word.id === id);
@@ -64,7 +64,7 @@ export const updateWord = (id, updates) => {
   return null;
 };
 
-// 刪除生詞
+// 刪除詞彙
 export const deleteWord = (id) => {
   const words = getAllWords();
   const filteredWords = words.filter(word => word.id !== id);
@@ -91,16 +91,16 @@ export const sortWords = (words, sortOption) => {
       return sortedWords.sort((a, b) => new Date(a.updatedAt || a.updated_at) - new Date(b.updatedAt || b.updated_at));
     
     case SORT_OPTIONS.READING_ASC:
-      return sortedWords.sort((a, b) => a.reading.localeCompare(b.reading, 'ja'));
-    
+      return sortedWords.sort((a, b) => (a.pronunciation || a.reading || '').localeCompare(b.pronunciation || b.reading || ''));
+
     case SORT_OPTIONS.READING_DESC:
-      return sortedWords.sort((a, b) => b.reading.localeCompare(a.reading, 'ja'));
-    
+      return sortedWords.sort((a, b) => (b.pronunciation || b.reading || '').localeCompare(a.pronunciation || a.reading || ''));
+
     case SORT_OPTIONS.CHINESE_ASC:
-      return sortedWords.sort((a, b) => a.chinese.localeCompare(b.chinese, 'zh'));
-    
+      return sortedWords.sort((a, b) => (a.translation || a.chinese || '').localeCompare(b.translation || b.chinese || ''));
+
     case SORT_OPTIONS.CHINESE_DESC:
-      return sortedWords.sort((a, b) => b.chinese.localeCompare(a.chinese, 'zh'));
+      return sortedWords.sort((a, b) => (b.translation || b.chinese || '').localeCompare(a.translation || a.chinese || ''));
     
     case SORT_OPTIONS.UPDATED_DESC:
     default:
@@ -108,7 +108,7 @@ export const sortWords = (words, sortOption) => {
   }
 };
 
-// 獲取排序後的生詞列表
+// 獲取排序後的詞彙列表
 export const getSortedWords = (sortOption = SORT_OPTIONS.UPDATED_DESC) => {
   const words = getAllWords();
   return sortWords(words, sortOption);
