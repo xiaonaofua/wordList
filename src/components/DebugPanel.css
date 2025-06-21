@@ -1,0 +1,84 @@
+.debug-panel {
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.debug-panel h3 {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
+.debug-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.debug-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.debug-actions button:not(.danger-btn) {
+  background: #007bff;
+  color: white;
+}
+
+.debug-actions button:not(.danger-btn):hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.danger-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.danger-btn:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.debug-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.debug-output {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.debug-output h4 {
+  margin: 0 0 12px 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.debug-output pre {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .debug-actions {
+    flex-direction: column;
+  }
+  
+  .debug-actions button {
+    width: 100%;
+  }
+}
