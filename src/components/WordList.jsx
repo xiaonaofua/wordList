@@ -14,11 +14,17 @@ const WordList = ({ refreshTrigger }) => {
     example: ''
   });
 
-  // 加載生詞列表（按最新時間排序）
+  // 加載詞彙列表（按更新時間排序）
   const loadWords = async () => {
     try {
       const allWords = await getAllWords();
-      setWords(allWords);
+      // 按更新時間降序排序（最新更新的在前）
+      const sortedWords = allWords.sort((a, b) => {
+        const aTime = new Date(a.updated_at || a.updatedAt || a.created_at || a.createdAt);
+        const bTime = new Date(b.updated_at || b.updatedAt || b.created_at || b.createdAt);
+        return bTime - aTime;
+      });
+      setWords(sortedWords);
     } catch (error) {
       console.error('Error loading words:', error);
       alert(t('loadWordsError') + '：' + (error.message || '未知錯誤'));
@@ -140,7 +146,7 @@ const WordList = ({ refreshTrigger }) => {
                 <th className="col-pronunciation">{t('pronunciation')}</th>
                 <th className="col-translation">{t('translation')}</th>
                 <th className="col-example">{t('example')}</th>
-                <th className="col-created">{t('created')}</th>
+                <th className="col-created">{t('lastUpdated') || '最後更新'}</th>
                 <th className="col-actions">{t('actions') || '操作'}</th>
               </tr>
             </thead>
@@ -192,7 +198,7 @@ const WordList = ({ refreshTrigger }) => {
                       </td>
                       <td className="col-created">
                         <span className="created-date">
-                          {formatDate(getCreatedAt(word))}
+                          {formatDate(getUpdatedAt(word) || getCreatedAt(word))}
                         </span>
                       </td>
                       <td className="col-actions">
@@ -239,7 +245,7 @@ const WordList = ({ refreshTrigger }) => {
                       </td>
                       <td className="col-created">
                         <span className="created-date">
-                          {formatDate(getCreatedAt(word))}
+                          {formatDate(getUpdatedAt(word) || getCreatedAt(word))}
                         </span>
                       </td>
                       <td className="col-actions">

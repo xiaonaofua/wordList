@@ -384,17 +384,49 @@ body.theme-retro .loading-spinner {
   border-radius: 0;
 }
 
+/* 用户操作按钮样式 */
+body.theme-retro .logout-btn {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+body.theme-retro .logout-btn:hover {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+}
+
+body.theme-retro .delete-account-btn {
+  background: #ff0000;
+  color: #fff;
+  border: 2px outset #ff0000;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+body.theme-retro .delete-account-btn:hover {
+  background: #ff4444;
+  border: 2px outset #ff4444;
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
   body.theme-retro {
     font-size: 10px !important;
   }
-  
+
   body.theme-retro h1 {
     font-size: 14px !important;
   }
-  
+
   body.theme-retro h2 {
     font-size: 11px !important;
+  }
+
+  body.theme-retro .user-actions {
+    flex-direction: column;
+    gap: 4px;
   }
 }

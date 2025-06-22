@@ -18,7 +18,7 @@ import './styles/retro-theme.css'
 // 主應用組件（內部）
 const AppContent = () => {
   const { t } = useLanguage()
-  const { user, loading, signOut } = useAuth()
+  const { user, loading, signOut, deleteAccount } = useAuth()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
@@ -52,6 +52,27 @@ const AppContent = () => {
     }
   }
 
+  // 處理刪除賬戶
+  const handleDeleteAccount = async () => {
+    const confirmMessage = t('confirmDeleteAccount') ||
+      '⚠️ 警告：删除账户将永久删除您的所有词汇数据，此操作无法撤销！\n\n确定要删除账户吗？'
+
+    if (window.confirm(confirmMessage)) {
+      const secondConfirm = t('confirmDeleteAccountSecond') ||
+        '请再次确认：您真的要删除账户和所有数据吗？'
+
+      if (window.confirm(secondConfirm)) {
+        const result = await deleteAccount()
+
+        if (result.success) {
+          alert(result.message || t('accountDeleteSuccess') || '账户删除成功')
+        } else {
+          alert(result.error || t('accountDeleteError') || '删除账户失败')
+        }
+      }
+    }
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -67,12 +88,21 @@ const AppContent = () => {
               <span className="welcome-text">
                 {t('welcome') || '欢迎'}, {user?.user_metadata?.username || user?.email}
               </span>
-              <button
-                onClick={handleSignOut}
-                className="logout-btn"
-              >
-                🚪 {t('logout')}
-              </button>
+              <div className="user-actions">
+                <button
+                  onClick={handleSignOut}
+                  className="logout-btn"
+                >
+                  🚪 {t('logout')}
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  className="delete-account-btn"
+                  title={t('deleteAccount') || '删除账户'}
+                >
+                  🗑️ {t('deleteAccount') || '删除账户'}
+                </button>
+              </div>
             </div>
             <button
               onClick={() => setShowDebug(!showDebug)}

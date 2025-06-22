@@ -131,6 +131,12 @@ export const translations = {
     registerSuccess: 'Registration successful! Please check your email to confirm your account',
     welcome: 'Welcome',
     confirmLogout: 'Are you sure you want to logout?',
+    deleteAccount: 'Delete Account',
+    confirmDeleteAccount: '⚠️ Warning: Deleting your account will permanently delete all your vocabulary data. This action cannot be undone!\n\nAre you sure you want to delete your account?',
+    confirmDeleteAccountSecond: 'Please confirm again: Do you really want to delete your account and all data?',
+    accountDeleteSuccess: 'Account deleted successfully',
+    accountDeleteError: 'Failed to delete account',
+    lastUpdated: 'Last Updated',
 
     // 主题
     selectTheme: 'Select Theme',
@@ -262,6 +268,12 @@ export const translations = {
     registerSuccess: '注册成功！请检查邮箱确认账户',
     welcome: '欢迎',
     confirmLogout: '确定要退出登录吗？',
+    deleteAccount: '删除账户',
+    confirmDeleteAccount: '⚠️ 警告：删除账户将永久删除您的所有词汇数据，此操作无法撤销！\n\n确定要删除账户吗？',
+    confirmDeleteAccountSecond: '请再次确认：您真的要删除账户和所有数据吗？',
+    accountDeleteSuccess: '账户删除成功',
+    accountDeleteError: '删除账户失败',
+    lastUpdated: '最後更新',
 
     // 主题
     selectTheme: '选择主题',

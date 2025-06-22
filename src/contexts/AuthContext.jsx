@@ -90,6 +90,51 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // 删除账户函数
+  const deleteAccount = async () => {
+    try {
+      // 获取当前用户
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        throw new Error('用户未登录')
+      }
+
+      // 删除用户的所有词汇数据
+      const { error: deleteWordsError } = await supabase
+        .from('words')
+        .delete()
+        .eq('user_id', user.id)
+
+      if (deleteWordsError) {
+        console.error('删除词汇数据失败:', deleteWordsError)
+        // 继续删除用户，即使词汇删除失败
+      }
+
+      // 删除用户账户
+      const { error: deleteUserError } = await supabase.auth.admin.deleteUser(user.id)
+
+      if (deleteUserError) {
+        // 如果 admin API 不可用，尝试使用客户端方法
+        const { error: clientDeleteError } = await supabase.auth.updateUser({
+          data: { deleted: true }
+        })
+
+        if (clientDeleteError) {
+          throw new Error('删除账户失败，请联系管理员')
+        }
+
+        // 标记删除后登出
+        await signOut()
+        return { success: true, message: '账户已标记为删除，请联系管理员完成删除' }
+      }
+
+      return { success: true, message: '账户删除成功' }
+    } catch (error) {
+      console.error('Delete account error:', error)
+      return { success: false, error: error.message || '删除账户失败' }
+    }
+  }
+
   // 发送验证码到邮箱
   const sendVerificationCode = async (email, username = '') => {
     try {
@@ -125,6 +170,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    deleteAccount,
     sendVerificationCode,
     verifyCode
   }
