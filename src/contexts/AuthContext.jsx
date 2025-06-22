@@ -69,8 +69,17 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       })
-      
+
       if (error) throw error
+
+      // 检查用户是否已被标记为删除
+      const user = data.user
+      if (user?.user_metadata?.deleted || user?.user_metadata?.status === 'deleted') {
+        // 如果用户已被标记删除，立即登出并拒绝登录
+        await supabase.auth.signOut()
+        throw new Error('此账户已被删除，无法登录。如有疑问请联系管理员。')
+      }
+
       return { data, error: null }
     } catch (error) {
       console.error('Sign in error:', error)
@@ -107,28 +116,70 @@ export const AuthProvider = ({ children }) => {
 
       if (deleteWordsError) {
         console.error('删除词汇数据失败:', deleteWordsError)
-        // 继续删除用户，即使词汇删除失败
+        throw new Error('删除词汇数据失败：' + deleteWordsError.message)
       }
 
-      // 删除用户账户
-      const { error: deleteUserError } = await supabase.auth.admin.deleteUser(user.id)
-
-      if (deleteUserError) {
-        // 如果 admin API 不可用，尝试使用客户端方法
-        const { error: clientDeleteError } = await supabase.auth.updateUser({
-          data: { deleted: true }
+      // 尝试使用数据库函数删除账户
+      try {
+        // 方法1：尝试完全删除账户
+        const { data: deleteResult, error: rpcError } = await supabase.rpc('delete_user_account', {
+          user_id: user.id
         })
 
-        if (clientDeleteError) {
-          throw new Error('删除账户失败，请联系管理员')
+        if (!rpcError && deleteResult?.success) {
+          // 删除成功，立即登出
+          await signOut()
+          return {
+            success: true,
+            message: deleteResult.message || '账户删除成功',
+            deletedWords: deleteResult.deleted_words
+          }
         }
-
-        // 标记删除后登出
-        await signOut()
-        return { success: true, message: '账户已标记为删除，请联系管理员完成删除' }
+      } catch (rpcError) {
+        console.log('完全删除方法失败，尝试标记删除:', rpcError)
       }
 
-      return { success: true, message: '账户删除成功' }
+      // 方法2：使用备用函数标记删除
+      try {
+        const { data: markResult, error: markError } = await supabase.rpc('mark_user_deleted')
+
+        if (!markError && markResult?.success) {
+          // 标记删除成功，立即登出
+          await signOut()
+          return {
+            success: true,
+            message: markResult.message || '账户已标记为删除，请联系管理员完成最终删除',
+            requiresAdminAction: markResult.requires_admin,
+            deletedWords: markResult.deleted_words
+          }
+        }
+      } catch (markError) {
+        console.log('标记删除方法失败，使用客户端方法:', markError)
+      }
+
+      // 方法3：客户端标记删除（最后备用方案）
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: {
+          deleted: true,
+          deleted_at: new Date().toISOString(),
+          status: 'deleted'
+        }
+      })
+
+      if (updateError) {
+        throw new Error('无法标记账户删除状态：' + updateError.message)
+      }
+
+      // 立即登出用户
+      await signOut()
+
+      // 返回需要管理员完成删除的消息
+      return {
+        success: true,
+        message: '账户数据已清理并标记为删除。您已被登出，请联系管理员完成最终删除。',
+        requiresAdminAction: true
+      }
+
     } catch (error) {
       console.error('Delete account error:', error)
       return { success: false, error: error.message || '删除账户失败' }
