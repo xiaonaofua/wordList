@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react'
 import WordForm from './components/WordForm'
 import WordList from './components/WordList'
 import WordStats from './components/WordStats'
-import SupabaseSetup from './components/SupabaseSetup'
-import DebugPanel from './components/DebugPanel'
-import DataMigration from './components/DataMigration'
+
 import LanguageSelector from './components/LanguageSelector'
 import ThemeSelector from './components/ThemeSelector'
 import AccountMenu from './components/AccountMenu'
@@ -21,9 +19,7 @@ const AppContent = () => {
   const { t } = useLanguage()
   const { user, loading } = useAuth()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const [showSetup, setShowSetup] = useState(false)
-  const [showDebug, setShowDebug] = useState(false)
-  const [showMigration, setShowMigration] = useState(false)
+
   const [isCloudConfigured, setIsCloudConfigured] = useState(true) // 现在默认已配置
 
   // 如果正在加载认证状态，显示加载界面
@@ -51,22 +47,7 @@ const AppContent = () => {
     setRefreshTrigger(prev => prev + 1)
   }
 
-  // 如果正在加載，顯示加載狀態
-  if (loading) {
-    return (
-      <div className="app-loading">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>{t('loading') || '加載中...'}</p>
-        </div>
-      </div>
-    )
-  }
 
-  // 如果用戶未登錄，顯示登錄表單
-  if (!user) {
-    return <AuthForm />
-  }
 
   return (
     <div className="app">
@@ -80,18 +61,13 @@ const AppContent = () => {
             <ThemeSelector />
             <LanguageSelector />
             <AccountMenu />
-            <button
-              onClick={() => setShowDebug(!showDebug)}
-              className="debug-btn"
-            >
-              🛠️ {t('debug')}
-            </button>
+
           </div>
         </div>
       </header>
 
       <main className="app-main">
-        {showDebug && <DebugPanel />}
+
 
         {/* 添加新詞彙表單 - 最頂部位置 */}
         <WordForm onWordAdded={handleWordAdded} />

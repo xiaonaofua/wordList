@@ -193,15 +193,7 @@
   color: #721c24;
 }
 
-.account-settings:hover {
-  background: #d1ecf1;
-  color: #0c5460;
-}
 
-.profile-info:hover {
-  background: #d4edda;
-  color: #155724;
-}
 
 /* 响应式设计 */
 @media (max-width: 768px) {

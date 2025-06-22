@@ -496,15 +496,7 @@ body.theme-retro .delete-account-item:hover {
   color: #fff;
 }
 
-body.theme-retro .account-settings:hover {
-  background: #00ff00;
-  color: #000;
-}
 
-body.theme-retro .profile-info:hover {
-  background: #00ffff;
-  color: #000;
-}
 
 /* 响应式调整 */
 @media (max-width: 768px) {

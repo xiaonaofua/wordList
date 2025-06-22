@@ -96,41 +96,15 @@ const AccountMenu = () => {
           <div className="dropdown-divider"></div>
           
           <div className="dropdown-menu">
-            <button 
-              className="menu-item account-settings"
-              onClick={() => {
-                setIsOpen(false)
-                // 这里可以添加账户设置功能
-                alert(t('accountSettingsComingSoon') || '账户设置功能即将推出')
-              }}
-            >
-              <span className="menu-icon">⚙️</span>
-              <span className="menu-text">{t('accountSettings') || '账户设置'}</span>
-            </button>
-            
-            <button 
-              className="menu-item profile-info"
-              onClick={() => {
-                setIsOpen(false)
-                // 这里可以添加个人资料功能
-                alert(t('profileInfoComingSoon') || '个人资料功能即将推出')
-              }}
-            >
-              <span className="menu-icon">📋</span>
-              <span className="menu-text">{t('profileInfo') || '个人资料'}</span>
-            </button>
-            
-            <div className="dropdown-divider"></div>
-            
-            <button 
+            <button
               className="menu-item logout-item"
               onClick={handleSignOut}
             >
               <span className="menu-icon">🚪</span>
               <span className="menu-text">{t('logout') || '退出登录'}</span>
             </button>
-            
-            <button 
+
+            <button
               className="menu-item delete-account-item"
               onClick={handleDeleteAccount}
             >
