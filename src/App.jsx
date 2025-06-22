@@ -7,6 +7,7 @@ import DebugPanel from './components/DebugPanel'
 import DataMigration from './components/DataMigration'
 import LanguageSelector from './components/LanguageSelector'
 import ThemeSelector from './components/ThemeSelector'
+import AccountMenu from './components/AccountMenu'
 import Auth from './components/Auth'
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
@@ -18,7 +19,7 @@ import './styles/retro-theme.css'
 // 主應用組件（內部）
 const AppContent = () => {
   const { t } = useLanguage()
-  const { user, loading, signOut, deleteAccount } = useAuth()
+  const { user, loading } = useAuth()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [showSetup, setShowSetup] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
@@ -45,32 +46,26 @@ const AppContent = () => {
     setRefreshTrigger(prev => prev + 1)
   }
 
-  // 處理登出
-  const handleSignOut = async () => {
-    if (window.confirm(t('confirmLogout') || '确定要退出登录吗？')) {
-      await signOut()
-    }
+  // 刷新词汇列表
+  const handleRefresh = () => {
+    setRefreshTrigger(prev => prev + 1)
   }
 
-  // 處理刪除賬戶
-  const handleDeleteAccount = async () => {
-    const confirmMessage = t('confirmDeleteAccount') ||
-      '⚠️ 警告：删除账户将永久删除您的所有词汇数据，此操作无法撤销！\n\n确定要删除账户吗？'
+  // 如果正在加載，顯示加載狀態
+  if (loading) {
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>{t('loading') || '加載中...'}</p>
+        </div>
+      </div>
+    )
+  }
 
-    if (window.confirm(confirmMessage)) {
-      const secondConfirm = t('confirmDeleteAccountSecond') ||
-        '请再次确认：您真的要删除账户和所有数据吗？'
-
-      if (window.confirm(secondConfirm)) {
-        const result = await deleteAccount()
-
-        if (result.success) {
-          alert(result.message || t('accountDeleteSuccess') || '账户删除成功')
-        } else {
-          alert(result.error || t('accountDeleteError') || '删除账户失败')
-        }
-      }
-    }
+  // 如果用戶未登錄，顯示登錄表單
+  if (!user) {
+    return <AuthForm />
   }
 
   return (
@@ -84,26 +79,7 @@ const AppContent = () => {
           <div className="header-actions">
             <ThemeSelector />
             <LanguageSelector />
-            <div className="user-info">
-              <span className="welcome-text">
-                {t('welcome') || '欢迎'}, {user?.user_metadata?.username || user?.email}
-              </span>
-              <div className="user-actions">
-                <button
-                  onClick={handleSignOut}
-                  className="logout-btn"
-                >
-                  🚪 {t('logout')}
-                </button>
-                <button
-                  onClick={handleDeleteAccount}
-                  className="delete-account-btn"
-                  title={t('deleteAccount') || '删除账户'}
-                >
-                  🗑️ {t('deleteAccount') || '删除账户'}
-                </button>
-              </div>
-            </div>
+            <AccountMenu />
             <button
               onClick={() => setShowDebug(!showDebug)}
               className="debug-btn"

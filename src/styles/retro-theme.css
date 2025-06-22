@@ -411,6 +411,101 @@ body.theme-retro .delete-account-btn:hover {
   border: 2px outset #ff4444;
 }
 
+/* 账户菜单复古样式 */
+body.theme-retro .account-trigger {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  color: #000;
+  border-radius: 0;
+  backdrop-filter: none;
+}
+
+body.theme-retro .account-trigger:hover {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+  transform: none;
+}
+
+body.theme-retro .user-avatar {
+  background: #808080;
+  border: 1px inset #c0c0c0;
+  border-radius: 0;
+}
+
+body.theme-retro .welcome-text {
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+}
+
+body.theme-retro .account-dropdown {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-retro .dropdown-header {
+  background: #000080;
+  color: #fff;
+}
+
+body.theme-retro .user-avatar-large {
+  background: #808080;
+  border: 1px inset #c0c0c0;
+  border-radius: 0;
+}
+
+body.theme-retro .username,
+body.theme-retro .user-email {
+  font-family: 'MS Sans Serif', sans-serif;
+}
+
+body.theme-retro .username {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+body.theme-retro .user-email {
+  font-size: 10px;
+}
+
+body.theme-retro .dropdown-divider {
+  background: #808080;
+  height: 1px;
+}
+
+body.theme-retro .menu-item {
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  color: #000;
+  padding: 4px 8px;
+}
+
+body.theme-retro .menu-item:hover {
+  background: #0000ff;
+  color: #fff;
+}
+
+body.theme-retro .logout-item:hover {
+  background: #ffff00;
+  color: #000;
+}
+
+body.theme-retro .delete-account-item:hover {
+  background: #ff0000;
+  color: #fff;
+}
+
+body.theme-retro .account-settings:hover {
+  background: #00ff00;
+  color: #000;
+}
+
+body.theme-retro .profile-info:hover {
+  background: #00ffff;
+  color: #000;
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
   body.theme-retro {

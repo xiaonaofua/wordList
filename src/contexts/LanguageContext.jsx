@@ -137,6 +137,11 @@ export const translations = {
     accountDeleteSuccess: 'Account deleted successfully',
     accountDeleteError: 'Failed to delete account',
     lastUpdated: 'Last Updated',
+    user: 'User',
+    accountSettings: 'Account Settings',
+    profileInfo: 'Profile Info',
+    accountSettingsComingSoon: 'Account settings feature coming soon',
+    profileInfoComingSoon: 'Profile info feature coming soon',
 
     // 主题
     selectTheme: 'Select Theme',
@@ -274,6 +279,11 @@ export const translations = {
     accountDeleteSuccess: '账户删除成功',
     accountDeleteError: '删除账户失败',
     lastUpdated: '最後更新',
+    user: '用户',
+    accountSettings: '账户设置',
+    profileInfo: '个人资料',
+    accountSettingsComingSoon: '账户设置功能即将推出',
+    profileInfoComingSoon: '个人资料功能即将推出',
 
     // 主题
     selectTheme: '选择主题',
