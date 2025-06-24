@@ -19,6 +19,28 @@
   font-weight: 700;
 }
 
+/* 搜索信息样式 */
+.search-info {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.search-term {
+  background: #e9ecef;
+  color: #495057;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.search-count {
+  color: #6c757d;
+  font-style: italic;
+}
+
 .empty-state {
   text-align: center;
   padding: 40px 20px;

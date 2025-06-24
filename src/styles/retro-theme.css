@@ -246,6 +246,96 @@ body.theme-retro .edit-input:focus {
   border-color: #c0c0c0;
 }
 
+/* 搜索组件复古样式 */
+body.theme-retro .word-search {
+  background: #c0c0c0;
+  border: 2px inset #c0c0c0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.theme-retro .search-title {
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+}
+
+body.theme-retro .search-input {
+  background: #fff;
+  border: 2px inset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 4px 6px;
+}
+
+body.theme-retro .search-input:focus {
+  outline: 1px dotted #000;
+  outline-offset: -2px;
+  box-shadow: none;
+  border-color: #c0c0c0;
+}
+
+body.theme-retro .search-btn {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+body.theme-retro .search-btn:hover:not(:disabled) {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+  transform: none;
+  box-shadow: none;
+}
+
+body.theme-retro .search-btn:disabled {
+  background: #808080;
+  color: #c0c0c0;
+  border: 2px inset #808080;
+}
+
+body.theme-retro .clear-search-btn {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+body.theme-retro .clear-search-btn:hover:not(:disabled) {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+  transform: none;
+}
+
+body.theme-retro .clear-search-btn:disabled {
+  background: #808080;
+  color: #c0c0c0;
+  border: 2px inset #808080;
+}
+
+body.theme-retro .search-term {
+  background: #ffff00;
+  color: #000;
+  border: 1px solid #000;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 10px;
+}
+
+body.theme-retro .search-count {
+  color: #000;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 10px;
+}
+
 /* 统计卡片样式 */
 body.theme-retro .stat-card {
   background: #fff;

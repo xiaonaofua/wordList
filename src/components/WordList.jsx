@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { getAllWords, deleteWord, updateWord } from '../utils/wordStorage';
 import { useLanguage } from '../contexts/LanguageContext';
+import WordSearch from './WordSearch';
 import './WordList.css';
 
 const WordList = ({ refreshTrigger }) => {
   const { t, currentLanguage } = useLanguage();
   const [words, setWords] = useState([]);
+  const [allWords, setAllWords] = useState([]); // 存储所有词汇
+  const [filteredWords, setFilteredWords] = useState([]); // 存储搜索结果
+  const [isSearching, setIsSearching] = useState(false); // 是否在搜索状态
+  const [searchTerm, setSearchTerm] = useState(''); // 当前搜索词
   const [editingWord, setEditingWord] = useState(null);
   const [editForm, setEditForm] = useState({
     original_text: '',
@@ -17,14 +22,17 @@ const WordList = ({ refreshTrigger }) => {
   // 加載詞彙列表（按更新時間排序）
   const loadWords = async () => {
     try {
-      const allWords = await getAllWords();
+      const wordsData = await getAllWords();
       // 按更新時間降序排序（最新更新的在前）
-      const sortedWords = allWords.sort((a, b) => {
+      const sortedWords = wordsData.sort((a, b) => {
         const aTime = new Date(a.updated_at || a.updatedAt || a.created_at || a.createdAt);
         const bTime = new Date(b.updated_at || b.updatedAt || b.created_at || b.createdAt);
         return bTime - aTime;
       });
-      setWords(sortedWords);
+      setAllWords(sortedWords); // 保存所有词汇
+      if (!isSearching) {
+        setWords(sortedWords); // 如果不在搜索状态，显示所有词汇
+      }
     } catch (error) {
       console.error('Error loading words:', error);
       alert(t('loadWordsError') + '：' + (error.message || '未知錯誤'));
@@ -110,6 +118,42 @@ const WordList = ({ refreshTrigger }) => {
     }));
   };
 
+  // 搜索功能
+  const handleSearch = (term) => {
+    if (!term) {
+      handleClearSearch();
+      return;
+    }
+
+    setSearchTerm(term);
+    setIsSearching(true);
+
+    // 在原文、发音、翻译中搜索
+    const filtered = allWords.filter(word => {
+      const originalText = (word.original_text || word.japanese || '').toLowerCase();
+      const pronunciation = (word.pronunciation || word.reading || '').toLowerCase();
+      const translation = (word.translation || word.chinese || '').toLowerCase();
+      const example = (word.example || '').toLowerCase();
+      const searchLower = term.toLowerCase();
+
+      return originalText.includes(searchLower) ||
+             pronunciation.includes(searchLower) ||
+             translation.includes(searchLower) ||
+             example.includes(searchLower);
+    });
+
+    setFilteredWords(filtered);
+    setWords(filtered);
+  };
+
+  // 清除搜索
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setIsSearching(false);
+    setFilteredWords([]);
+    setWords(allWords);
+  };
+
   // 格式化時間顯示
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -128,8 +172,22 @@ const WordList = ({ refreshTrigger }) => {
 
   return (
     <div className="word-list-container">
+      {/* 搜索组件 */}
+      <WordSearch onSearch={handleSearch} onClear={handleClearSearch} />
+
       <div className="word-list-header">
-        <h2>📚 {t('latestWords')} ({words.length} {t('wordsCount')})</h2>
+        <h2>📚 {isSearching ? t('searchResults') : t('latestWords')} ({words.length} {t('wordsCount')})</h2>
+        {isSearching && (
+          <div className="search-info">
+            <span className="search-term">"{searchTerm}"</span>
+            <span className="search-count">
+              {words.length > 0
+                ? `${words.length} ${t('searchResultsCount')}`
+                : t('noSearchResults')
+              }
+            </span>
+          </div>
+        )}
       </div>
 
       {words.length === 0 ? (

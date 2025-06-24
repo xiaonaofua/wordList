@@ -18,7 +18,7 @@ export const LANGUAGES = {
 export const translations = {
   en: {
     // 應用標題
-    appTitle: 'Multilingual Vocabulary',
+    appTitle: 'Vocabulary',
     appSubtitle: 'Record and manage your language learning vocabulary',
 
     // 表單
@@ -44,6 +44,15 @@ export const translations = {
     created: 'Created',
     updated: 'Updated',
     deleteWord: 'Delete this word',
+
+    // 搜索功能
+    searchWords: 'Search Words',
+    searchPlaceholder: 'Search by word, pronunciation, or translation...',
+    searchButton: 'Search',
+    clearSearch: 'Clear',
+    searchResults: 'Search Results',
+    noSearchResults: '0 results found',
+    searchResultsCount: 'results found',
 
     // 統計
     learningStats: 'Learning Statistics',
@@ -75,7 +84,7 @@ export const translations = {
     deleteWordError: 'Error deleting word',
 
     // 頁腳
-    footerText: 'Multilingual Vocabulary - Making language learning easier',
+    footerText: 'Vocabulary - Making language learning easier',
     cloudStorage: 'Using cloud storage',
     localStorage: 'Using local storage',
 
@@ -156,7 +165,7 @@ export const translations = {
 
   zh: {
     // 應用標題
-    appTitle: '多語言生詞本',
+    appTitle: '生詞本',
     appSubtitle: '記錄和管理您的語言學習詞彙',
 
     // 表單
@@ -182,6 +191,15 @@ export const translations = {
     created: '創建',
     updated: '更新',
     deleteWord: '刪除此詞彙',
+
+    // 搜索功能
+    searchWords: '搜索詞彙',
+    searchPlaceholder: '搜索生詞、發音或翻譯...',
+    searchButton: '搜索',
+    clearSearch: '清空',
+    searchResults: '搜索結果',
+    noSearchResults: '0件符合結果',
+    searchResultsCount: '件符合結果',
 
     // 統計
     learningStats: '學習統計',
@@ -213,7 +231,7 @@ export const translations = {
     deleteWordError: '刪除詞彙時發生錯誤',
 
     // 頁腳
-    footerText: '多語言生詞本 - 讓語言學習更簡單',
+    footerText: '生詞本 - 讓語言學習更簡單',
     cloudStorage: '使用雲端存儲',
     localStorage: '使用本地存儲',
 
