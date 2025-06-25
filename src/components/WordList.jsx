@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllWords, deleteWord, updateWord } from '../utils/wordStorage';
+import { getAllWords, deleteWord, updateWord, toggleWordFavorite } from '../utils/wordStorage';
 import { useLanguage } from '../contexts/LanguageContext';
 import WordSearch from './WordSearch';
 import './WordList.css';
@@ -152,6 +152,17 @@ const WordList = ({ refreshTrigger }) => {
     setIsSearching(false);
     setFilteredWords([]);
     setWords(allWords);
+  };
+
+  // 切换收藏状态
+  const handleToggleFavorite = async (id) => {
+    try {
+      await toggleWordFavorite(id);
+      loadWords(); // 重新加载列表
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      alert(t('toggleFavoriteError') || '切换收藏状态失败：' + (error.message || '未知错误'));
+    }
   };
 
   // 格式化時間顯示
@@ -308,6 +319,13 @@ const WordList = ({ refreshTrigger }) => {
                       </td>
                       <td className="col-actions">
                         <div className="action-buttons">
+                          <button
+                            className={`favorite-btn ${word.is_favorite || word.isFavorite ? 'favorited' : ''}`}
+                            onClick={() => handleToggleFavorite(word.id)}
+                            title={word.is_favorite || word.isFavorite ? t('removeFavorite') || '取消收藏' : t('addFavorite') || '添加收藏'}
+                          >
+                            {word.is_favorite || word.isFavorite ? '⭐' : '☆'}
+                          </button>
                           <button
                             className="edit-btn"
                             onClick={() => handleEdit(word)}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>创建基础图标</title>
+</head>
+<body>
+    <h1>生词本 PWA 图标创建器</h1>
+    <p>点击按钮创建并下载图标</p>
+    
+    <button onclick="createAndDownloadIcons()">创建并下载所有图标</button>
+    
+    <div id="preview"></div>
+    
+    <script>
+        const sizes = [16, 32, 72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // 背景渐变
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // 圆角效果
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const radius = size * 0.15;
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // 书本图标
+            const bookWidth = size * 0.6;
+            const bookHeight = size * 0.4;
+            const bookX = (size - bookWidth) / 2;
+            const bookY = (size - bookHeight) / 2;
+            
+            // 书本主体
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(bookX, bookY, bookWidth, bookHeight);
+            
+            // 书本装订线
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(size / 2 - size * 0.01, bookY, size * 0.02, bookHeight);
+            
+            // 书页线条
+            ctx.fillStyle = '#667eea';
+            ctx.globalAlpha = 0.3;
+            const lineHeight = size * 0.015;
+            const lineSpacing = size * 0.04;
+            const startY = bookY + size * 0.05;
+            
+            for (let i = 0; i < 6; i++) {
+                const y = startY + i * lineSpacing;
+                if (y + lineHeight < bookY + bookHeight - size * 0.05) {
+                    ctx.fillRect(bookX + size * 0.05, y, bookWidth - size * 0.1, lineHeight);
+                }
+            }
+            
+            ctx.globalAlpha = 1;
+            
+            // 文字 "词"
+            ctx.fillStyle = '#667eea';
+            ctx.font = `bold ${size * 0.25}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('词', size / 2, size / 2 + size * 0.02);
+            
+            return canvas;
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function createAndDownloadIcons() {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '<h3>生成的图标预览：</h3>';
+            
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const canvas = createIcon(size);
+                    const filename = `icon-${size}x${size}.png`;
+                    
+                    // 添加预览
+                    const wrapper = document.createElement('div');
+                    wrapper.style.display = 'inline-block';
+                    wrapper.style.margin = '10px';
+                    wrapper.style.textAlign = 'center';
+                    
+                    const previewCanvas = canvas.cloneNode();
+                    const previewCtx = previewCanvas.getContext('2d');
+                    previewCtx.drawImage(canvas, 0, 0);
+                    
+                    if (size > 96) {
+                        previewCanvas.style.width = '96px';
+                        previewCanvas.style.height = '96px';
+                    }
+                    
+                    const label = document.createElement('div');
+                    label.textContent = `${size}x${size}`;
+                    label.style.fontSize = '12px';
+                    label.style.marginTop = '5px';
+                    
+                    wrapper.appendChild(previewCanvas);
+                    wrapper.appendChild(label);
+                    preview.appendChild(wrapper);
+                    
+                    // 下载图标
+                    downloadCanvas(canvas, filename);
+                }, index * 300);
+            });
+        }
+    </script>
+</body>
+</html>

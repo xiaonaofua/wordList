@@ -183,6 +183,32 @@
   justify-content: center;
 }
 
+.favorite-btn {
+  background: transparent;
+  color: #ffc107;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 193, 7, 0.1);
+  transform: scale(1.1);
+}
+
+.favorite-btn.favorited {
+  color: #ffc107;
+  text-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
+}
+
 .edit-btn {
   background: #007bff;
   color: white;

@@ -501,6 +501,28 @@ body.theme-retro .delete-account-btn:hover {
   border: 2px outset #ff4444;
 }
 
+/* 收藏按钮复古样式 */
+body.theme-retro .favorite-btn {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #c0c0c0;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+body.theme-retro .favorite-btn:hover {
+  background: #d0d0d0;
+  border: 2px outset #d0d0d0;
+  transform: none;
+}
+
+body.theme-retro .favorite-btn.favorited {
+  background: #ffff00;
+  color: #000;
+  border: 2px inset #ffff00;
+  text-shadow: none;
+}
+
 /* 账户菜单复古样式 */
 body.theme-retro .account-trigger {
   background: #c0c0c0;

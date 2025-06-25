@@ -160,7 +160,10 @@ export const translations = {
     save: 'Save',
     cancel: 'Cancel',
     wordUpdateSuccess: 'Word updated successfully!',
-    wordUpdateError: 'Error updating word'
+    wordUpdateError: 'Error updating word',
+    addFavorite: 'Add to Favorites',
+    removeFavorite: 'Remove from Favorites',
+    toggleFavoriteError: 'Error toggling favorite status'
   },
 
   zh: {
@@ -307,7 +310,10 @@ export const translations = {
     save: '保存',
     cancel: '取消',
     wordUpdateSuccess: '詞彙更新成功！',
-    wordUpdateError: '更新詞彙時發生錯誤'
+    wordUpdateError: '更新詞彙時發生錯誤',
+    addFavorite: '添加收藏',
+    removeFavorite: '取消收藏',
+    toggleFavoriteError: '切换收藏状态失败'
   }
 }
 

@@ -170,6 +170,41 @@ export const deleteWord = async (id) => {
   }
 }
 
+// 切换词汇收藏状态
+export const toggleWordFavorite = async (id) => {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase not configured')
+  }
+
+  try {
+    // 先获取当前状态
+    const { data: currentWord, error: fetchError } = await supabase
+      .from(WORDS_TABLE)
+      .select('is_favorite')
+      .eq('id', id)
+      .single()
+
+    if (fetchError) throw fetchError
+
+    // 切换收藏状态
+    const newFavoriteStatus = !currentWord.is_favorite
+    const { data, error } = await supabase
+      .from(WORDS_TABLE)
+      .update({
+        is_favorite: newFavoriteStatus,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+
+    if (error) throw error
+    return data[0]
+  } catch (error) {
+    console.error('Error toggling word favorite:', error)
+    throw error
+  }
+}
+
 // 排序選項
 export const SORT_OPTIONS = {
   UPDATED_DESC: 'updated_desc',

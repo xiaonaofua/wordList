@@ -81,6 +81,21 @@ export const deleteWord = async (id) => {
   }
 };
 
+// 切换词汇收藏状态
+export const toggleWordFavorite = async (id) => {
+  try {
+    if (useCloudStorage()) {
+      return await supabaseStorage.toggleWordFavorite(id)
+    } else {
+      return localStorage.toggleWordFavorite(id)
+    }
+  } catch (error) {
+    console.error('Error toggling word favorite:', error)
+    // 如果雲端失敗，回退到本地存儲
+    return localStorage.toggleWordFavorite(id)
+  }
+};
+
 // 排序選項
 export const SORT_OPTIONS = {
   UPDATED_DESC: 'updated_desc', // 最新更新時間（默認）

@@ -72,6 +72,19 @@ export const deleteWord = (id) => {
   return filteredWords;
 };
 
+// 切换词汇收藏状态
+export const toggleWordFavorite = (id) => {
+  const words = getAllWords();
+  const index = words.findIndex(word => word.id === id);
+  if (index !== -1) {
+    words[index].isFavorite = !words[index].isFavorite;
+    words[index].updatedAt = new Date().toISOString();
+    saveAllWords(words);
+    return words[index];
+  }
+  throw new Error('Word not found');
+};
+
 // 排序選項
 export const SORT_OPTIONS = {
   UPDATED_DESC: 'updated_desc', // 最新更新時間（默認）
