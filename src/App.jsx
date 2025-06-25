@@ -7,6 +7,7 @@ import LanguageSelector from './components/LanguageSelector'
 import ThemeSelector from './components/ThemeSelector'
 import AccountMenu from './components/AccountMenu'
 import Auth from './components/Auth'
+import ErrorBoundary from './components/ErrorBoundary'
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
@@ -85,13 +86,19 @@ const AppContent = () => {
 
 
         {/* 添加新詞彙表單 - 最頂部位置 */}
-        <WordForm onWordAdded={handleWordAdded} />
+        <ErrorBoundary>
+          <WordForm onWordAdded={handleWordAdded} />
+        </ErrorBoundary>
 
         {/* 最新詞彙列表 - 第二位置 */}
-        <WordList refreshTrigger={refreshTrigger} />
+        <ErrorBoundary>
+          <WordList refreshTrigger={refreshTrigger} />
+        </ErrorBoundary>
 
         {/* 統計信息 - 底部位置 */}
-        <WordStats refreshTrigger={refreshTrigger} />
+        <ErrorBoundary>
+          <WordStats refreshTrigger={refreshTrigger} />
+        </ErrorBoundary>
       </main>
 
       <footer className="app-footer">

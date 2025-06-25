@@ -218,10 +218,10 @@ const WordList = ({ refreshTrigger }) => {
         )}
       </div>
 
-      {words.length === 0 ? (
+      {!words || words.length === 0 ? (
         <div className="empty-state">
-          <p>{t('noWords')}</p>
-          <p>{t('noWordsSubtext')}</p>
+          <p>{isSearching ? t('noSearchResults') : t('noWords')}</p>
+          <p>{isSearching ? '' : t('noWordsSubtext')}</p>
         </div>
       ) : (
         <div className="word-table-container">
@@ -237,7 +237,12 @@ const WordList = ({ refreshTrigger }) => {
               </tr>
             </thead>
             <tbody>
-              {words.map((word) => (
+              {words && words.length > 0 && words.map((word) => {
+                if (!word || !word.id) {
+                  console.warn('Invalid word data:', word);
+                  return null;
+                }
+                return (
                 <tr key={word.id} className="word-row">
                   {editingWord === word.id ? (
                     // 編輯模式
@@ -310,7 +315,7 @@ const WordList = ({ refreshTrigger }) => {
                     // 顯示模式
                     <>
                       <td className="col-original">
-                        <span className="original-text">{word.original_text || word.japanese}</span>
+                        <span className="original-text">{word.original_text || word.japanese || '-'}</span>
                       </td>
                       <td className="col-pronunciation">
                         <span className="pronunciation">
@@ -318,10 +323,10 @@ const WordList = ({ refreshTrigger }) => {
                         </span>
                       </td>
                       <td className="col-translation">
-                        <span className="translation">{word.translation || word.chinese}</span>
+                        <span className="translation">{word.translation || word.chinese || '-'}</span>
                       </td>
                       <td className="col-example">
-                        <span className="example" title={word.example}>
+                        <span className="example" title={word.example || ''}>
                           {word.example ? (
                             word.example.length > 30
                               ? word.example.substring(0, 30) + '...'
@@ -362,7 +367,8 @@ const WordList = ({ refreshTrigger }) => {
                     </>
                   )}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
