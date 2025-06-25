@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传 PNG 图标</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .file-list {
+            margin: 20px 0;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: white;
+        }
+        .file-preview {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+        .generate-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .generate-btn:hover {
+            background: #5a6fd8;
+        }
+        .code-output {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .step {
+            background: #e9ecef;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 生词本 PWA 图标上传工具</h1>
+    
+    <div class="step">
+        <h3>步骤 1: 生成图标文件</h3>
+        <p>如果您还没有生成图标，请先：</p>
+        <button class="generate-btn" onclick="window.open('create-basic-icons.html', '_blank')">
+            打开图标生成器
+        </button>
+    </div>
+    
+    <div class="step">
+        <h3>步骤 2: 上传图标文件</h3>
+        <p>将下载的 PNG 图标文件拖拽到下面的区域，或点击选择文件：</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <p>📁 拖拽 PNG 图标文件到这里</p>
+            <p>或</p>
+            <input type="file" id="fileInput" multiple accept=".png" style="display: none;">
+            <button class="generate-btn" onclick="document.getElementById('fileInput').click()">
+                选择文件
+            </button>
+        </div>
+        
+        <div class="file-list" id="fileList"></div>
+    </div>
+    
+    <div class="step">
+        <h3>步骤 3: 生成代码</h3>
+        <p>上传文件后，点击下面的按钮生成需要的代码：</p>
+        <button class="generate-btn" onclick="generateCode()">
+            生成更新代码
+        </button>
+        
+        <div id="codeOutput"></div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+        
+        // 文件上传处理
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.type === 'image/png' && file.name.includes('icon-')) {
+                    uploadedFiles.push(file);
+                    displayFile(file);
+                }
+            }
+        }
+        
+        function displayFile(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            const preview = document.createElement('img');
+            preview.className = 'file-preview';
+            preview.src = URL.createObjectURL(file);
+            
+            const info = document.createElement('span');
+            info.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            
+            fileItem.appendChild(preview);
+            fileItem.appendChild(info);
+            fileList.appendChild(fileItem);
+        }
+        
+        function generateCode() {
+            if (uploadedFiles.length === 0) {
+                alert('请先上传图标文件！');
+                return;
+            }
+            
+            // 生成 manifest.json 更新代码
+            const manifestIcons = uploadedFiles.map(file => {
+                const size = file.name.match(/(\d+)x\d+/)[1];
+                return `    {
+      "src": "/wordList/icons/${file.name}",
+      "sizes": "${size}x${size}",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }`;
+            }).join(',\n');
+            
+            const manifestCode = `// 更新 public/manifest.json 中的 icons 部分：
+"icons": [
+${manifestIcons}
+],`;
+            
+            // 生成 index.html 更新代码
+            const indexCode = `// 更新 index.html 中的图标引用：
+<link rel="apple-touch-icon" href="/wordList/icons/icon-192x192.png" />
+<meta name="msapplication-TileImage" content="/wordList/icons/icon-144x144.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/wordList/icons/icon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/wordList/icons/icon-16x16.png" />`;
+            
+            const fullCode = `${manifestCode}
+
+${indexCode}
+
+// 文件列表 (需要放到 public/icons/ 目录):
+${uploadedFiles.map(f => `- ${f.name}`).join('\n')}`;
+            
+            const codeOutput = document.getElementById('codeOutput');
+            codeOutput.innerHTML = `
+                <div class="code-output">${fullCode}</div>
+                <button class="copy-btn" onclick="copyToClipboard()">复制代码</button>
+            `;
+        }
+        
+        function copyToClipboard() {
+            const codeText = document.querySelector('.code-output').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('代码已复制到剪贴板！');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -83,13 +83,35 @@ export const checkTableExists = async () => {
 
 // 獲取當前用戶的所有詞彙
 export const getAllWords = async () => {
+  if (!isSupabaseConfigured()) {
+    console.log('Supabase not configured, returning empty array')
+    return []
+  }
+
   try {
+    console.log('Fetching words from Supabase...')
+
+    // 获取当前用户
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      console.log('No authenticated user found')
+      return []
+    }
+
+    console.log('Current user:', user.id)
+
     const { data, error } = await supabase
       .from(WORDS_TABLE)
       .select('*')
+      .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
 
-    if (error) throw error
+    if (error) {
+      console.error('Supabase query error:', error)
+      throw error
+    }
+
+    console.log('Fetched words from Supabase:', data)
     return data || []
   } catch (error) {
     console.error('Error fetching words:', error)

@@ -22,20 +22,37 @@ const WordList = ({ refreshTrigger }) => {
   // 加載詞彙列表（按更新時間排序）
   const loadWords = async () => {
     try {
+      console.log('Loading words...');
       const wordsData = await getAllWords();
+      console.log('Loaded words:', wordsData);
+
+      if (!wordsData || !Array.isArray(wordsData)) {
+        console.warn('Invalid words data:', wordsData);
+        setAllWords([]);
+        setWords([]);
+        return;
+      }
+
       // 按更新時間降序排序（最新更新的在前）
       const sortedWords = wordsData.sort((a, b) => {
         const aTime = new Date(a.updated_at || a.updatedAt || a.created_at || a.createdAt);
         const bTime = new Date(b.updated_at || b.updatedAt || b.created_at || b.createdAt);
         return bTime - aTime;
       });
+
+      console.log('Sorted words:', sortedWords);
       setAllWords(sortedWords); // 保存所有词汇
       if (!isSearching) {
         setWords(sortedWords); // 如果不在搜索状态，显示所有词汇
       }
     } catch (error) {
       console.error('Error loading words:', error);
-      alert(t('loadWordsError') + '：' + (error.message || '未知錯誤'));
+      // 显示更详细的错误信息
+      const errorMessage = error.message || error.toString() || '未知錯誤';
+      alert(t('loadWordsError') + '：' + errorMessage);
+      // 设置空数组避免界面崩溃
+      setAllWords([]);
+      setWords([]);
     }
   };
 
