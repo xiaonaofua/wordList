@@ -77,15 +77,9 @@ const WordStats = ({ refreshTrigger }) => {
   };
 
   useEffect(() => {
-    const calculateStatsAsync = async () => {
-      try {
-        await calculateStats();
-      } catch (error) {
-        console.error('Error in useEffect calculateStats:', error);
-      }
-    };
-
-    calculateStatsAsync();
+    calculateStats().catch(error => {
+      console.error('Error in useEffect calculateStats:', error);
+    });
   }, [refreshTrigger, currentLanguage]); // 添加語言變化監聽
 
   // 格式化月份顯示

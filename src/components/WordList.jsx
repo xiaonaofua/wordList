@@ -11,6 +11,7 @@ const WordList = ({ refreshTrigger }) => {
   const [filteredWords, setFilteredWords] = useState([]); // 存储搜索结果
   const [isSearching, setIsSearching] = useState(false); // 是否在搜索状态
   const [searchTerm, setSearchTerm] = useState(''); // 当前搜索词
+  const [isLoading, setIsLoading] = useState(true); // 加载状态
   const [editingWord, setEditingWord] = useState(null);
   const [editForm, setEditForm] = useState({
     original_text: '',
@@ -22,6 +23,7 @@ const WordList = ({ refreshTrigger }) => {
   // 加載詞彙列表（按更新時間排序）
   const loadWords = async () => {
     try {
+      setIsLoading(true);
       console.log('Loading words...');
       const wordsData = await getAllWords();
       console.log('Loaded words:', wordsData);
@@ -30,6 +32,7 @@ const WordList = ({ refreshTrigger }) => {
         console.warn('Invalid words data:', wordsData);
         setAllWords([]);
         setWords([]);
+        setIsLoading(false);
         return;
       }
 
@@ -45,8 +48,10 @@ const WordList = ({ refreshTrigger }) => {
       if (!isSearching) {
         setWords(sortedWords); // 如果不在搜索状态，显示所有词汇
       }
+      setIsLoading(false);
     } catch (error) {
       console.error('Error loading words:', error);
+      setIsLoading(false);
       // 显示更详细的错误信息
       const errorMessage = error.message || error.toString() || '未知錯誤';
       alert(t('loadWordsError') + '：' + errorMessage);
@@ -58,15 +63,9 @@ const WordList = ({ refreshTrigger }) => {
 
   // 初始加載、刷新和語言變化時重新加載
   useEffect(() => {
-    const loadWordsAsync = async () => {
-      try {
-        await loadWords();
-      } catch (error) {
-        console.error('Error in useEffect loadWords:', error);
-      }
-    };
-
-    loadWordsAsync();
+    loadWords().catch(error => {
+      console.error('Error in useEffect loadWords:', error);
+    });
   }, [refreshTrigger, currentLanguage]); // 添加語言變化監聽
 
   // 處理刪除詞彙
@@ -205,6 +204,16 @@ const WordList = ({ refreshTrigger }) => {
   // 處理時間字段的兼容性（本地存儲使用 createdAt/updatedAt，Supabase 使用 created_at/updated_at）
   const getCreatedAt = (word) => word.createdAt || word.created_at;
   const getUpdatedAt = (word) => word.updatedAt || word.updated_at;
+
+  if (isLoading) {
+    return (
+      <div className="word-list-container">
+        <div className="loading-state">
+          <p>正在加载词汇...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="word-list-container">
