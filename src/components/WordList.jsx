@@ -58,7 +58,15 @@ const WordList = ({ refreshTrigger }) => {
 
   // 初始加載、刷新和語言變化時重新加載
   useEffect(() => {
-    loadWords();
+    const loadWordsAsync = async () => {
+      try {
+        await loadWords();
+      } catch (error) {
+        console.error('Error in useEffect loadWords:', error);
+      }
+    };
+
+    loadWordsAsync();
   }, [refreshTrigger, currentLanguage]); // 添加語言變化監聽
 
   // 處理刪除詞彙
