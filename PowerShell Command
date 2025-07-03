@@ -1,0 +1,5 @@
+# Option 1: Change policy for the current user only (recommended)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Option 2: Change policy for the entire system (requires admin rights)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
