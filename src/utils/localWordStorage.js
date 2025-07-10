@@ -1,4 +1,5 @@
 // 本地存儲管理（原有的 localStorage 邏輯）
+import { sortWords, SORT_OPTIONS } from './sortUtils';
 
 // 詞彙數據結構
 export const createWord = (originalText, pronunciation, translation, example) => {
@@ -17,11 +18,13 @@ export const createWord = (originalText, pronunciation, translation, example) =>
 // 本地存儲鍵名
 const STORAGE_KEY = 'vocabulary_list';
 
-// 獲取所有詞彙
+// 獲取所有詞彙（收藏优先排序）
 export const getAllWords = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const words = stored ? JSON.parse(stored) : [];
+    // 使用排序工具函数：收藏词汇优先，然后按更新时间排序
+    return sortWords(words, SORT_OPTIONS.UPDATED_DESC);
   } catch (error) {
     console.error('Error loading words from storage:', error);
     return [];
@@ -83,42 +86,6 @@ export const toggleWordFavorite = (id) => {
     return words[index];
   }
   throw new Error('Word not found');
-};
-
-// 排序選項
-export const SORT_OPTIONS = {
-  UPDATED_DESC: 'updated_desc', // 最新更新時間（默認）
-  UPDATED_ASC: 'updated_asc',   // 最舊更新時間
-  READING_ASC: 'reading_asc',   // 日文讀音升序
-  READING_DESC: 'reading_desc', // 日文讀音降序
-  CHINESE_ASC: 'chinese_asc',   // 中文升序
-  CHINESE_DESC: 'chinese_desc'  // 中文降序
-};
-
-// 排序函數
-export const sortWords = (words, sortOption) => {
-  const sortedWords = [...words];
-  
-  switch (sortOption) {
-    case SORT_OPTIONS.UPDATED_ASC:
-      return sortedWords.sort((a, b) => new Date(a.updatedAt || a.updated_at) - new Date(b.updatedAt || b.updated_at));
-    
-    case SORT_OPTIONS.READING_ASC:
-      return sortedWords.sort((a, b) => (a.pronunciation || a.reading || '').localeCompare(b.pronunciation || b.reading || ''));
-
-    case SORT_OPTIONS.READING_DESC:
-      return sortedWords.sort((a, b) => (b.pronunciation || b.reading || '').localeCompare(a.pronunciation || a.reading || ''));
-
-    case SORT_OPTIONS.CHINESE_ASC:
-      return sortedWords.sort((a, b) => (a.translation || a.chinese || '').localeCompare(b.translation || b.chinese || ''));
-
-    case SORT_OPTIONS.CHINESE_DESC:
-      return sortedWords.sort((a, b) => (b.translation || b.chinese || '').localeCompare(a.translation || a.chinese || ''));
-    
-    case SORT_OPTIONS.UPDATED_DESC:
-    default:
-      return sortedWords.sort((a, b) => new Date(b.updatedAt || b.updated_at) - new Date(a.updatedAt || a.updated_at));
-  }
 };
 
 // 獲取排序後的詞彙列表

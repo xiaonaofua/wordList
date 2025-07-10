@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAllWords, deleteWord, updateWord, toggleWordFavorite } from '../utils/wordStorage';
 import { useLanguage } from '../contexts/LanguageContext';
+import { sortWords, sortSearchResults, SORT_OPTIONS } from '../utils/sortUtils';
 import WordSearch from './WordSearch';
 import './WordList.css';
 
@@ -20,7 +21,7 @@ const WordList = ({ refreshTrigger }) => {
     example: ''
   });
 
-  // 加載詞彙列表（按更新時間排序）
+  // 加載詞彙列表（收藏词汇优先，按更新時間排序）
   const loadWords = async () => {
     try {
       setIsLoading(true);
@@ -36,14 +37,10 @@ const WordList = ({ refreshTrigger }) => {
         return;
       }
 
-      // 按更新時間降序排序（最新更新的在前）
-      const sortedWords = wordsData.sort((a, b) => {
-        const aTime = new Date(a.updated_at || a.updatedAt || a.created_at || a.createdAt);
-        const bTime = new Date(b.updated_at || b.updatedAt || b.created_at || b.createdAt);
-        return bTime - aTime;
-      });
+      // 使用新的排序函数：收藏词汇优先，然后按更新时间排序
+      const sortedWords = sortWords(wordsData, SORT_OPTIONS.UPDATED_DESC);
 
-      console.log('Sorted words:', sortedWords);
+      console.log('Sorted words (favorites first):', sortedWords);
       setAllWords(sortedWords); // 保存所有词汇
       if (!isSearching) {
         setWords(sortedWords); // 如果不在搜索状态，显示所有词汇
@@ -142,7 +139,7 @@ const WordList = ({ refreshTrigger }) => {
     }));
   };
 
-  // 搜索功能
+  // 搜索功能（保持收藏优先）
   const handleSearch = (term) => {
     if (!term) {
       handleClearSearch();
@@ -152,30 +149,21 @@ const WordList = ({ refreshTrigger }) => {
     setSearchTerm(term);
     setIsSearching(true);
 
-    // 在原文、发音、翻译中搜索
-    const filtered = allWords.filter(word => {
-      const originalText = (word.original_text || word.japanese || '').toLowerCase();
-      const pronunciation = (word.pronunciation || word.reading || '').toLowerCase();
-      const translation = (word.translation || word.chinese || '').toLowerCase();
-      const example = (word.example || '').toLowerCase();
-      const searchLower = term.toLowerCase();
-
-      return originalText.includes(searchLower) ||
-             pronunciation.includes(searchLower) ||
-             translation.includes(searchLower) ||
-             example.includes(searchLower);
-    });
+    // 使用新的搜索排序函数：搜索结果中收藏词汇优先
+    const filtered = sortSearchResults(allWords, term, SORT_OPTIONS.UPDATED_DESC);
 
     setFilteredWords(filtered);
     setWords(filtered);
   };
 
-  // 清除搜索
+  // 清除搜索（恢复收藏优先排序）
   const handleClearSearch = () => {
     setSearchTerm('');
     setIsSearching(false);
     setFilteredWords([]);
-    setWords(allWords);
+    // 恢复时重新排序，确保收藏词汇优先
+    const sortedWords = sortWords(allWords, SORT_OPTIONS.UPDATED_DESC);
+    setWords(sortedWords);
   };
 
   // 切换收藏状态
@@ -259,8 +247,9 @@ const WordList = ({ refreshTrigger }) => {
                   console.warn('Invalid word data:', word);
                   return null;
                 }
+                const isFavorited = word.is_favorite || word.isFavorite;
                 return (
-                <tr key={word.id} className="word-row">
+                <tr key={word.id} className={`word-row ${isFavorited ? 'favorited' : ''}`}>
                   {editingWord === word.id ? (
                     // 編輯模式
                     <>

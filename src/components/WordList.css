@@ -209,6 +209,41 @@
   text-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
 }
 
+/* 收藏词汇行的特殊样式 */
+.word-row.favorited {
+  background: linear-gradient(90deg, rgba(255, 193, 7, 0.05) 0%, transparent 100%);
+  border-left: 3px solid #ffc107;
+}
+
+.word-row.favorited:hover {
+  background: linear-gradient(90deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.02) 100%);
+}
+
+/* 收藏词汇的标题样式 */
+.word-row.favorited .original-text {
+  font-weight: 600;
+  color: #b45309;
+}
+
+/* 收藏分组标题 */
+.favorite-section-title {
+  background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  color: white;
+  padding: 8px 16px;
+  margin: 16px 0 8px 0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favorite-section-title .icon {
+  font-size: 1.1rem;
+}
+
 .edit-btn {
   background: #007bff;
   color: white;

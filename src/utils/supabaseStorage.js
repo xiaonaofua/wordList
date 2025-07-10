@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { sortWords, SORT_OPTIONS } from './sortUtils'
 
 // 檢查是否已配置（现在总是返回 true，因为我们使用预配置的实例）
 export const isSupabaseConfigured = () => {
@@ -104,7 +105,6 @@ export const getAllWords = async () => {
       .from(WORDS_TABLE)
       .select('*')
       .eq('user_id', user.id)
-      .order('updated_at', { ascending: false })
 
     if (error) {
       console.error('Supabase query error:', error)
@@ -112,7 +112,12 @@ export const getAllWords = async () => {
     }
 
     console.log('Fetched words from Supabase:', data)
-    return data || []
+
+    // 使用排序工具函数：收藏词汇优先，然后按更新时间排序
+    const sortedData = sortWords(data || [], SORT_OPTIONS.UPDATED_DESC)
+    console.log('Sorted words (favorites first):', sortedData)
+
+    return sortedData
   } catch (error) {
     console.error('Error fetching words:', error)
     throw error
@@ -227,50 +232,16 @@ export const toggleWordFavorite = async (id) => {
   }
 }
 
-// 排序選項
-export const SORT_OPTIONS = {
-  UPDATED_DESC: 'updated_desc',
-  UPDATED_ASC: 'updated_asc',
-  READING_ASC: 'reading_asc',
-  READING_DESC: 'reading_desc',
-  CHINESE_ASC: 'chinese_asc',
-  CHINESE_DESC: 'chinese_desc'
-}
-
-// 獲取排序後的詞彙列表
+// 獲取排序後的詞彙列表（使用客户端排序以支持收藏优先）
 export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
 
   try {
-    let query = supabase.from(WORDS_TABLE).select('*')
-
-    switch (sortOption) {
-      case SORT_OPTIONS.UPDATED_ASC:
-        query = query.order('updated_at', { ascending: true })
-        break
-      case SORT_OPTIONS.READING_ASC:
-        query = query.order('pronunciation', { ascending: true })
-        break
-      case SORT_OPTIONS.READING_DESC:
-        query = query.order('pronunciation', { ascending: false })
-        break
-      case SORT_OPTIONS.CHINESE_ASC:
-        query = query.order('translation', { ascending: true })
-        break
-      case SORT_OPTIONS.CHINESE_DESC:
-        query = query.order('translation', { ascending: false })
-        break
-      case SORT_OPTIONS.UPDATED_DESC:
-      default:
-        query = query.order('updated_at', { ascending: false })
-        break
-    }
-
-    const { data, error } = await query
-    if (error) throw error
-    return data || []
+    // 获取所有数据，然后在客户端排序以支持收藏优先
+    const allWords = await getAllWords();
+    return sortWords(allWords, sortOption);
   } catch (error) {
     console.error('Error fetching sorted words:', error)
     throw error

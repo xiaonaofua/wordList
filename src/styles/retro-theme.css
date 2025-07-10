@@ -336,6 +336,31 @@ body.theme-retro .search-count {
   font-size: 10px;
 }
 
+/* 复古主题收藏词汇样式 */
+body.theme-retro .word-row.favorited {
+  background: #ffff00;
+  border-left: 3px solid #ff0000;
+}
+
+body.theme-retro .word-row.favorited:hover {
+  background: #ffff80;
+}
+
+body.theme-retro .word-row.favorited .original-text {
+  font-weight: bold;
+  color: #000080;
+}
+
+body.theme-retro .favorite-section-title {
+  background: #008080;
+  color: #ffffff;
+  border: 2px outset #008080;
+  border-radius: 0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  text-shadow: none;
+}
+
 /* 统计卡片样式 */
 body.theme-retro .stat-card {
   background: #fff;
