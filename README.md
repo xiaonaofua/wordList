@@ -4,7 +4,7 @@
 
 ## 🌐 在線使用
 
-**立即體驗：** [https://co2sou.github.io/wordList/](https://co2sou.github.io/wordList/)
+**立即體驗：** [https://xiaonaofua.github.io/wordList/](https://xiaonaofua.github.io/wordList/)
 
 ## ✨ 核心功能
 
@@ -241,12 +241,12 @@ useEffect(() => {
 ## 🚀 快速開始
 
 ### 在線使用（推薦）
-直接訪問：[https://co2sou.github.io/wordList/](https://co2sou.github.io/wordList/)
+直接訪問：[https://xiaonaofua.github.io/wordList/](https://xiaonaofua.github.io/wordList/)
 
 ### 本地開發
 ```bash
 # 克隆項目
-git clone https://github.com/co2sou/wordList.git
+git clone https://github.com/xiaonaofua/wordList.git
 cd wordList
 
 # 安裝依賴
@@ -307,4 +307,4 @@ MIT License
 
 ---
 
-**立即開始學習：** [https://co2sou.github.io/wordList/](https://co2sou.github.io/wordList/) 📚
+**立即開始學習：** [https://xiaonaofua.github.io/wordList/](https://xiaonaofua.github.io/wordList/) 📚
