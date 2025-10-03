@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
+import { LanguageCode } from '../types'
 import './LanguageSelector.css'
 
-const LanguageSelector = () => {
+const LanguageSelector: React.FC = () => {
   const { currentLanguage, changeLanguage, languages } = useLanguage()
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 點擊外部關閉下拉菜單
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: globalThis.MouseEvent): void => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -21,12 +22,12 @@ const LanguageSelector = () => {
     }
   }, [])
 
-  const handleLanguageChange = (langCode) => {
+  const handleLanguageChange = (langCode: LanguageCode): void => {
     changeLanguage(langCode)
     setIsOpen(false)
   }
 
-  const toggleDropdown = () => {
+  const toggleDropdown = (): void => {
     setIsOpen(!isOpen)
   }
 
@@ -34,7 +35,7 @@ const LanguageSelector = () => {
 
   return (
     <div className="language-selector" ref={dropdownRef}>
-      <button 
+      <button
         className="language-button"
         onClick={toggleDropdown}
         aria-label="Select Language"
@@ -43,14 +44,14 @@ const LanguageSelector = () => {
         <span className="language-name">{currentLang.name}</span>
         <span className={`language-arrow ${isOpen ? 'open' : ''}`}>▼</span>
       </button>
-      
+
       {isOpen && (
         <div className="language-dropdown">
           {Object.values(languages).map((lang) => (
             <button
               key={lang.code}
               className={`language-option ${currentLanguage === lang.code ? 'active' : ''}`}
-              onClick={() => handleLanguageChange(lang.code)}
+              onClick={() => handleLanguageChange(lang.code as LanguageCode)}
             >
               <span className="language-flag">{lang.flag}</span>
               <span className="language-name">{lang.name}</span>

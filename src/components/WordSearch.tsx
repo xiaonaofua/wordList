@@ -1,21 +1,26 @@
-import { useState } from 'react'
+import { useState, KeyboardEvent } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import './WordSearch.css'
 
-const WordSearch = ({ onSearch, onClear }) => {
-  const { t } = useLanguage()
-  const [searchTerm, setSearchTerm] = useState('')
+interface WordSearchProps {
+  onSearch: (searchTerm: string) => void
+  onClear: () => void
+}
 
-  const handleSearch = () => {
+const WordSearch: React.FC<WordSearchProps> = ({ onSearch, onClear }) => {
+  const { t } = useLanguage()
+  const [searchTerm, setSearchTerm] = useState<string>('')
+
+  const handleSearch = (): void => {
     onSearch(searchTerm.trim())
   }
 
-  const handleClear = () => {
+  const handleClear = (): void => {
     setSearchTerm('')
     onClear()
   }
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       handleSearch()
     }
@@ -35,14 +40,14 @@ const WordSearch = ({ onSearch, onClear }) => {
             className="search-input"
           />
           <div className="search-buttons">
-            <button 
+            <button
               onClick={handleSearch}
               className="search-btn"
               disabled={!searchTerm.trim()}
             >
               {t('searchButton')}
             </button>
-            <button 
+            <button
               onClick={handleClear}
               className="clear-search-btn"
               disabled={!searchTerm}

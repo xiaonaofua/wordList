@@ -1,13 +1,15 @@
 import { supabase } from '../lib/supabase'
+import { Word, WordUpdate, SortOption, SupabaseConfig } from '../types'
 import { sortWords, SORT_OPTIONS } from './sortUtils'
+import { RealtimeChannel } from '@supabase/supabase-js'
 
 // 檢查是否已配置（现在总是返回 true，因为我们使用预配置的实例）
-export const isSupabaseConfigured = () => {
+export const isSupabaseConfigured = (): boolean => {
   return true
 }
 
 // 初始化 Supabase 客戶端（现在不需要，但保持兼容性）
-export const initializeSupabase = (config) => {
+export const initializeSupabase = (_config: SupabaseConfig): boolean => {
   return true
 }
 
@@ -15,7 +17,7 @@ export const initializeSupabase = (config) => {
 const WORDS_TABLE = 'words'
 
 // 創建數據庫表的 SQL（用戶需要在 Supabase 控制台執行）
-export const getCreateTableSQL = () => {
+export const getCreateTableSQL = (): string => {
   return `
 -- 創建詞彙表（用戶隔離版本）
 CREATE TABLE IF NOT EXISTS words (
@@ -25,6 +27,7 @@ CREATE TABLE IF NOT EXISTS words (
   pronunciation TEXT,
   translation TEXT NOT NULL,
   example TEXT,
+  is_favorite BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -67,14 +70,14 @@ CREATE TRIGGER update_words_updated_at
 }
 
 // 檢查表是否存在
-export const checkTableExists = async () => {
+export const checkTableExists = async (): Promise<boolean> => {
   if (!isSupabaseConfigured()) return false
-  
+
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from(WORDS_TABLE)
       .select('count', { count: 'exact', head: true })
-    
+
     return !error
   } catch (error) {
     console.error('Table check error:', error)
@@ -83,7 +86,7 @@ export const checkTableExists = async () => {
 }
 
 // 獲取當前用戶的所有詞彙
-export const getAllWords = async () => {
+export const getAllWords = async (): Promise<Word[]> => {
   if (!isSupabaseConfigured()) {
     console.log('Supabase not configured, returning empty array')
     return []
@@ -114,7 +117,7 @@ export const getAllWords = async () => {
     console.log('Fetched words from Supabase:', data)
 
     // 使用排序工具函数：收藏词汇优先，然后按更新时间排序
-    const sortedData = sortWords(data || [], SORT_OPTIONS.UPDATED_DESC)
+    const sortedData = sortWords(data || [], SORT_OPTIONS.UPDATED_DESC as SortOption)
     console.log('Sorted words (favorites first):', sortedData)
 
     return sortedData
@@ -125,7 +128,12 @@ export const getAllWords = async () => {
 }
 
 // 添加新詞彙（自動關聯到當前用戶）
-export const addWord = async (originalText, pronunciation, translation, example) => {
+export const addWord = async (
+  originalText: string,
+  pronunciation: string,
+  translation: string,
+  example: string
+): Promise<Word> => {
   try {
     // 獲取當前用戶
     const { data: { user } } = await supabase.auth.getUser()
@@ -148,7 +156,7 @@ export const addWord = async (originalText, pronunciation, translation, example)
       .single()
 
     if (error) throw error
-    return data
+    return data as Word
   } catch (error) {
     console.error('Error adding word:', error)
     throw error
@@ -156,7 +164,7 @@ export const addWord = async (originalText, pronunciation, translation, example)
 }
 
 // 更新詞彙
-export const updateWord = async (id, updates) => {
+export const updateWord = async (id: string | number, updates: WordUpdate): Promise<Word> => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
@@ -170,7 +178,7 @@ export const updateWord = async (id, updates) => {
       .single()
 
     if (error) throw error
-    return data
+    return data as Word
   } catch (error) {
     console.error('Error updating word:', error)
     throw error
@@ -178,7 +186,7 @@ export const updateWord = async (id, updates) => {
 }
 
 // 刪除詞彙
-export const deleteWord = async (id) => {
+export const deleteWord = async (id: string | number): Promise<boolean> => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
@@ -198,7 +206,7 @@ export const deleteWord = async (id) => {
 }
 
 // 切换词汇收藏状态
-export const toggleWordFavorite = async (id) => {
+export const toggleWordFavorite = async (id: string | number): Promise<Word> => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
@@ -225,7 +233,7 @@ export const toggleWordFavorite = async (id) => {
       .select()
 
     if (error) throw error
-    return data[0]
+    return data[0] as Word
   } catch (error) {
     console.error('Error toggling word favorite:', error)
     throw error
@@ -233,15 +241,15 @@ export const toggleWordFavorite = async (id) => {
 }
 
 // 獲取排序後的詞彙列表（使用客户端排序以支持收藏优先）
-export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => {
+export const getSortedWords = async (sortOption: SortOption = SortOption.UPDATED_DESC): Promise<Word[]> => {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured')
   }
 
   try {
     // 获取所有数据，然后在客户端排序以支持收藏优先
-    const allWords = await getAllWords();
-    return sortWords(allWords, sortOption);
+    const allWords = await getAllWords()
+    return sortWords(allWords, sortOption)
   } catch (error) {
     console.error('Error fetching sorted words:', error)
     throw error
@@ -249,7 +257,7 @@ export const getSortedWords = async (sortOption = SORT_OPTIONS.UPDATED_DESC) => 
 }
 
 // 實時訂閱變更
-export const subscribeToWords = (callback) => {
+export const subscribeToWords = (callback: (payload: any) => void): RealtimeChannel | null => {
   if (!isSupabaseConfigured()) {
     console.warn('Supabase not configured for real-time updates')
     return null
@@ -258,12 +266,12 @@ export const subscribeToWords = (callback) => {
   try {
     const subscription = supabase
       .channel('words_changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: WORDS_TABLE 
-        }, 
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: WORDS_TABLE
+        },
         callback
       )
       .subscribe()

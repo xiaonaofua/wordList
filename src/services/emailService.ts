@@ -1,13 +1,27 @@
 import emailjs from '@emailjs/browser'
+import { EmailResponse } from '../types'
 
 // EmailJS 配置
 // 这些是公开的配置，用于发送验证码邮件
-const EMAILJS_SERVICE_ID = 'service_vocabulary'
-const EMAILJS_TEMPLATE_ID = 'template_verification'
+// const EMAILJS_SERVICE_ID = 'service_vocabulary'
+// const EMAILJS_TEMPLATE_ID = 'template_verification'
 const EMAILJS_PUBLIC_KEY = 'your_public_key_here'
 
+// 验证码数据接口
+interface VerificationData {
+  code: string
+  timestamp: number
+  expires: number
+}
+
+// 验证码验证结果
+interface VerifyCodeResult {
+  valid: boolean
+  error: string | null
+}
+
 // 初始化 EmailJS
-const initEmailJS = () => {
+const initEmailJS = (): boolean => {
   try {
     emailjs.init(EMAILJS_PUBLIC_KEY)
     return true
@@ -18,7 +32,11 @@ const initEmailJS = () => {
 }
 
 // 发送验证码邮件
-export const sendVerificationEmail = async (email, code, username = '') => {
+export const sendVerificationEmail = async (
+  email: string,
+  code: string,
+  username: string = ''
+): Promise<EmailResponse> => {
   try {
     // 创建美观的邮件内容
     const emailContent = `
@@ -116,50 +134,50 @@ export const sendVerificationEmail = async (email, code, username = '') => {
 }
 
 // 验证邮箱格式
-export const validateEmail = (email) => {
+export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
 
 // 生成验证码
-export const generateVerificationCode = () => {
+export const generateVerificationCode = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
 // 存储验证码（本地存储，用于验证）
-export const storeVerificationCode = (email, code) => {
-  const verificationData = {
+export const storeVerificationCode = (email: string, code: string): void => {
+  const verificationData: VerificationData = {
     code,
     timestamp: Date.now(),
     expires: Date.now() + 10 * 60 * 1000 // 10分钟过期
   }
-  
+
   localStorage.setItem(`verification_code_${email}`, JSON.stringify(verificationData))
 }
 
 // 验证验证码
-export const verifyCode = (email, inputCode) => {
+export const verifyCode = (email: string, inputCode: string): VerifyCodeResult => {
   try {
     const stored = localStorage.getItem(`verification_code_${email}`)
     if (!stored) {
       return { valid: false, error: '验证码不存在或已过期' }
     }
-    
-    const { code, expires } = JSON.parse(stored)
-    
+
+    const { code, expires }: VerificationData = JSON.parse(stored)
+
     if (Date.now() > expires) {
       localStorage.removeItem(`verification_code_${email}`)
       return { valid: false, error: '验证码已过期，请重新获取' }
     }
-    
+
     if (code !== inputCode.trim()) {
       return { valid: false, error: '验证码错误，请检查后重新输入' }
     }
-    
+
     // 验证成功，清除验证码
     localStorage.removeItem(`verification_code_${email}`)
     return { valid: true, error: null }
-    
+
   } catch (error) {
     console.error('Verify code error:', error)
     return { valid: false, error: '验证码验证失败' }
@@ -167,16 +185,19 @@ export const verifyCode = (email, inputCode) => {
 }
 
 // 清除过期的验证码
-export const cleanupExpiredCodes = () => {
+export const cleanupExpiredCodes = (): void => {
   const keys = Object.keys(localStorage)
   const now = Date.now()
-  
+
   keys.forEach(key => {
     if (key.startsWith('verification_code_')) {
       try {
-        const data = JSON.parse(localStorage.getItem(key))
-        if (data.expires < now) {
-          localStorage.removeItem(key)
+        const stored = localStorage.getItem(key)
+        if (stored) {
+          const data: VerificationData = JSON.parse(stored)
+          if (data.expires < now) {
+            localStorage.removeItem(key)
+          }
         }
       } catch (error) {
         // 如果解析失败，删除这个键
@@ -187,10 +208,10 @@ export const cleanupExpiredCodes = () => {
 }
 
 // 初始化邮件服务
-export const initializeEmailService = () => {
+export const initializeEmailService = (): boolean => {
   // 清理过期的验证码
   cleanupExpiredCodes()
-  
+
   // 初始化 EmailJS（如果配置了的话）
   return initEmailJS()
 }

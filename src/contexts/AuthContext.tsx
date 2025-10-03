@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { supabase } from '../lib/supabase'
 import {
   sendVerificationEmail,
@@ -7,15 +7,27 @@ import {
   verifyCode as verifyVerificationCode,
   initializeEmailService
 } from '../services/emailService'
+import type {
+  AuthContextType,
+  User,
+  Session,
+  AuthResponse,
+  DeleteAccountResult,
+  EmailResponse
+} from '../types'
 
 // 创建认证上下文
-const AuthContext = createContext()
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+interface AuthProviderProps {
+  children: ReactNode
+}
 
 // 认证提供者组件
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [session, setSession] = useState(null)
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
     // 初始化邮件服务
@@ -41,7 +53,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   // 注册函数
-  const signUp = async (email, password, username) => {
+  const signUp = async (email: string, password: string, username: string): Promise<AuthResponse> => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -53,17 +65,17 @@ export const AuthProvider = ({ children }) => {
           }
         }
       })
-      
+
       if (error) throw error
       return { data, error: null }
     } catch (error) {
       console.error('Sign up error:', error)
-      return { data: null, error }
+      return { data: null, error: error as { message: string } }
     }
   }
 
   // 登录函数
-  const signIn = async (email, password) => {
+  const signIn = async (email: string, password: string): Promise<AuthResponse> => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -83,24 +95,24 @@ export const AuthProvider = ({ children }) => {
       return { data, error: null }
     } catch (error) {
       console.error('Sign in error:', error)
-      return { data: null, error }
+      return { data: null, error: error as { message: string } }
     }
   }
 
   // 登出函数
-  const signOut = async () => {
+  const signOut = async (): Promise<{ error: { message: string } | null }> => {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
       return { error: null }
     } catch (error) {
       console.error('Sign out error:', error)
-      return { error }
+      return { error: error as { message: string } }
     }
   }
 
   // 删除账户函数
-  const deleteAccount = async () => {
+  const deleteAccount = async (): Promise<DeleteAccountResult> => {
     try {
       // 获取当前用户
       const { data: { user } } = await supabase.auth.getUser()
@@ -132,7 +144,7 @@ export const AuthProvider = ({ children }) => {
           return {
             success: true,
             message: deleteResult.message || '账户删除成功',
-            deletedWords: deleteResult.deleted_words
+            deleted_words: deleteResult.deleted_words
           }
         }
       } catch (rpcError) {
@@ -150,7 +162,7 @@ export const AuthProvider = ({ children }) => {
             success: true,
             message: markResult.message || '账户已标记为删除，请联系管理员完成最终删除',
             requiresAdminAction: markResult.requires_admin,
-            deletedWords: markResult.deleted_words
+            deleted_words: markResult.deleted_words
           }
         }
       } catch (markError) {
@@ -182,12 +194,15 @@ export const AuthProvider = ({ children }) => {
 
     } catch (error) {
       console.error('Delete account error:', error)
-      return { success: false, error: error.message || '删除账户失败' }
+      return {
+        success: false,
+        error: (error as Error).message || '删除账户失败'
+      }
     }
   }
 
   // 发送验证码到邮箱
-  const sendVerificationCode = async (email, username = '') => {
+  const sendVerificationCode = async (email: string, username: string = ''): Promise<EmailResponse> => {
     try {
       // 生成6位数验证码
       const code = generateVerificationCode()
@@ -199,22 +214,23 @@ export const AuthProvider = ({ children }) => {
       const result = await sendVerificationEmail(email, code, username)
 
       if (result.success) {
-        return { success: true, error: null, message: result.message }
+        return { success: true, message: result.message }
       } else {
-        return { success: false, error: result.message }
+        return { success: false, message: result.message }
       }
     } catch (error) {
       console.error('Send verification code error:', error)
-      return { success: false, error: '发送验证码失败，请稍后重试' }
+      return { success: false, message: '发送验证码失败，请稍后重试' }
     }
   }
 
   // 验证验证码
-  const verifyCode = (email, inputCode) => {
-    return verifyVerificationCode(email, inputCode)
+  const verifyCode = (email: string, inputCode: string): boolean => {
+    const result = verifyVerificationCode(email, inputCode)
+    return result.valid
   }
 
-  const value = {
+  const value: AuthContextType = {
     user,
     session,
     loading,
@@ -234,7 +250,7 @@ export const AuthProvider = ({ children }) => {
 }
 
 // 使用认证的 Hook
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')

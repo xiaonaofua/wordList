@@ -1,7 +1,14 @@
 // 示例數據，用於測試應用功能
-import { addWord } from './wordStorage';
+import { addWord } from './wordStorage'
 
-export const sampleWords = [
+interface SampleWord {
+  japanese: string
+  reading: string
+  chinese: string
+  example: string
+}
+
+export const sampleWords: SampleWord[] = [
   {
     japanese: '勉強',
     reading: 'べんきょう',
@@ -50,15 +57,15 @@ export const sampleWords = [
     chinese: '工作',
     example: '新しい仕事を始めました。'
   }
-];
+]
 
 // 添加示例數據的函數
-export const addSampleData = () => {
-  sampleWords.forEach(word => {
-    addWord(word.japanese, word.reading, word.chinese, word.example);
-  });
-  console.log('示例數據已添加');
-};
+export const addSampleData = async (): Promise<void> => {
+  for (const word of sampleWords) {
+    await addWord(word.japanese, word.reading, word.chinese, word.example)
+  }
+  console.log('示例數據已添加')
+}
 
 // 在開發環境中可以調用此函數來快速添加測試數據
 // addSampleData();

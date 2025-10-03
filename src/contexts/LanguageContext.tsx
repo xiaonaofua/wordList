@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
+import type { LanguageContextType, LanguageCode, Language, Translations } from '../types'
 
 // 語言配置
-export const LANGUAGES = {
+export const LANGUAGES: Record<LanguageCode, Language> = {
   en: {
     code: 'en',
     name: 'English',
@@ -15,7 +16,7 @@ export const LANGUAGES = {
 }
 
 // 翻譯文本
-export const translations = {
+export const translations: Record<LanguageCode, Translations> = {
   en: {
     // 應用標題
     appTitle: 'Vocabulary',
@@ -318,39 +319,43 @@ export const translations = {
 }
 
 // 創建語言上下文
-const LanguageContext = createContext()
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 // 語言存儲鍵
 const LANGUAGE_STORAGE_KEY = 'app_language'
 
 // 獲取默認語言
-const getDefaultLanguage = () => {
+const getDefaultLanguage = (): LanguageCode => {
   // 先檢查本地存儲
   const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY)
-  if (saved && LANGUAGES[saved]) {
-    return saved
+  if (saved && LANGUAGES[saved as LanguageCode]) {
+    return saved as LanguageCode
   }
-  
+
   // 默認英文
   return 'en'
 }
 
-// 語言提供者組件
-export const LanguageProvider = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState(getDefaultLanguage())
+interface LanguageProviderProps {
+  children: ReactNode
+}
 
-  const changeLanguage = (langCode) => {
+// 語言提供者組件
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>(getDefaultLanguage())
+
+  const changeLanguage = (langCode: LanguageCode): void => {
     if (LANGUAGES[langCode]) {
       setCurrentLanguage(langCode)
       localStorage.setItem(LANGUAGE_STORAGE_KEY, langCode)
     }
   }
 
-  const t = (key) => {
+  const t = (key: string): string => {
     return translations[currentLanguage]?.[key] || translations.en[key] || key
   }
 
-  const value = {
+  const value: LanguageContextType = {
     currentLanguage,
     changeLanguage,
     t,
@@ -365,7 +370,7 @@ export const LanguageProvider = ({ children }) => {
 }
 
 // 使用語言的 Hook
-export const useLanguage = () => {
+export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext)
   if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider')

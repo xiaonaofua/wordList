@@ -3,16 +3,16 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import './AccountMenu.css'
 
-const AccountMenu = () => {
+const AccountMenu: React.FC = () => {
   const { user, signOut, deleteAccount } = useAuth()
   const { t } = useLanguage()
-  const [isOpen, setIsOpen] = useState(false)
-  const menuRef = useRef(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   // 点击外部关闭菜单
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const handleClickOutside = (event: globalThis.MouseEvent): void => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -24,7 +24,7 @@ const AccountMenu = () => {
   }, [])
 
   // 处理登出
-  const handleSignOut = async () => {
+  const handleSignOut = async (): Promise<void> => {
     if (window.confirm(t('confirmLogout') || '确定要退出登录吗？')) {
       await signOut()
       setIsOpen(false)
@@ -32,17 +32,17 @@ const AccountMenu = () => {
   }
 
   // 处理删除账户
-  const handleDeleteAccount = async () => {
-    const confirmMessage = t('confirmDeleteAccount') || 
+  const handleDeleteAccount = async (): Promise<void> => {
+    const confirmMessage = t('confirmDeleteAccount') ||
       '⚠️ 警告：删除账户将永久删除您的所有词汇数据，此操作无法撤销！\n\n确定要删除账户吗？'
-    
+
     if (window.confirm(confirmMessage)) {
-      const secondConfirm = t('confirmDeleteAccountSecond') || 
+      const secondConfirm = t('confirmDeleteAccountSecond') ||
         '请再次确认：您真的要删除账户和所有数据吗？'
-      
+
       if (window.confirm(secondConfirm)) {
         const result = await deleteAccount()
-        
+
         if (result.success) {
           alert(result.message || t('accountDeleteSuccess') || '账户删除成功')
         } else {
@@ -54,14 +54,14 @@ const AccountMenu = () => {
   }
 
   // 获取用户显示名称
-  const getUserDisplayName = () => {
+  const getUserDisplayName = (): string => {
     return user?.user_metadata?.username || user?.email || t('user') || '用户'
   }
 
   return (
     <div className="account-menu" ref={menuRef}>
       {/* 用户信息和菜单触发器 */}
-      <button 
+      <button
         className="account-trigger"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
@@ -92,9 +92,9 @@ const AccountMenu = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="dropdown-divider"></div>
-          
+
           <div className="dropdown-menu">
             <button
               className="menu-item logout-item"

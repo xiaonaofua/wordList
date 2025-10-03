@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import WordForm from './components/WordForm'
 import WordList from './components/WordList'
 import WordStats from './components/WordStats'
@@ -11,17 +11,16 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { initializeSupabase, isSupabaseConfigured, getCreateTableSQL } from './utils/wordStorage'
 import './App.css'
 import './styles/retro-theme.css'
 
 // 主應用組件（內部）
-const AppContent = () => {
+const AppContent: React.FC = () => {
   const { t } = useLanguage()
   const { user, loading } = useAuth()
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0)
 
-  const [isCloudConfigured, setIsCloudConfigured] = useState(true) // 现在默认已配置
+  const [isCloudConfigured] = useState<boolean>(true) // 现在默认已配置
 
   // 如果正在加载认证状态，显示加载界面
   if (loading) {
@@ -39,18 +38,9 @@ const AppContent = () => {
   }
 
   // 當添加新詞彙時觸發列表刷新
-  const handleWordAdded = () => {
+  const handleWordAdded = (): void => {
     setRefreshTrigger(prev => prev + 1)
   }
-
-  // 刷新词汇列表
-  const handleRefresh = () => {
-    setRefreshTrigger(prev => prev + 1)
-  }
-
-
-
-
 
   return (
     <div className="app">
@@ -64,14 +54,11 @@ const AppContent = () => {
             <ThemeSelector />
             <LanguageSelector />
             <AccountMenu />
-
           </div>
         </div>
       </header>
 
       <main className="app-main">
-
-
         {/* 添加新詞彙表單 - 最頂部位置 */}
         <ErrorBoundary>
           <WordForm onWordAdded={handleWordAdded} />
@@ -94,14 +81,12 @@ const AppContent = () => {
           {isCloudConfigured ? `🌐 ${t('cloudStorage')}` : `💾 ${t('localStorage')}`}
         </p>
       </footer>
-
-
     </div>
   )
 }
 
 // 主應用組件（外部包裝）
-function App() {
+const App: React.FC = () => {
   return (
     <ThemeProvider>
       <LanguageProvider>

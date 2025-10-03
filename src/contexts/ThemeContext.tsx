@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import type { ThemeContextType, ThemeId, ThemesMap } from '../types'
 
 // 主题配置
-export const THEMES = {
+export const THEMES: ThemesMap = {
   retro: {
     id: 'retro',
     name: 'Windows 98',
@@ -19,23 +20,27 @@ export const THEMES = {
 }
 
 // 创建主题上下文
-const ThemeContext = createContext()
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 // 主题存储键
 const THEME_STORAGE_KEY = 'app_theme'
 
 // 获取默认主题
-const getDefaultTheme = () => {
+const getDefaultTheme = (): ThemeId => {
   const saved = localStorage.getItem(THEME_STORAGE_KEY)
-  if (saved && THEMES[saved]) {
-    return saved
+  if (saved && THEMES[saved as ThemeId]) {
+    return saved as ThemeId
   }
   return 'modern' // 默认现代风格
 }
 
+interface ThemeProviderProps {
+  children: ReactNode
+}
+
 // 主题提供者组件
-export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState(getDefaultTheme())
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>(getDefaultTheme())
 
   // 应用主题到 body
   useEffect(() => {
@@ -43,14 +48,14 @@ export const ThemeProvider = ({ children }) => {
     document.body.setAttribute('data-theme', currentTheme)
   }, [currentTheme])
 
-  const changeTheme = (themeId) => {
+  const changeTheme = (themeId: ThemeId): void => {
     if (THEMES[themeId]) {
       setCurrentTheme(themeId)
       localStorage.setItem(THEME_STORAGE_KEY, themeId)
     }
   }
 
-  const value = {
+  const value: ThemeContextType = {
     currentTheme,
     changeTheme,
     themes: THEMES,
@@ -66,7 +71,7 @@ export const ThemeProvider = ({ children }) => {
 }
 
 // 使用主题的 Hook
-export const useTheme = () => {
+export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext)
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider')

@@ -1,24 +1,33 @@
-import { useState } from 'react'
+import { useState, FormEvent, ChangeEvent } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import './Auth.css'
 
-const Auth = () => {
+type AuthMode = 'login' | 'register' | 'verify'
+
+interface FormData {
+  email: string
+  password: string
+  username: string
+  verificationCode: string
+}
+
+const Auth: React.FC = () => {
   const { signUp, signIn, sendVerificationCode, verifyCode } = useAuth()
   const { t } = useLanguage()
-  const [mode, setMode] = useState('login') // 'login', 'register', 'verify'
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  
-  const [formData, setFormData] = useState({
+  const [mode, setMode] = useState<AuthMode>('login')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
+  const [success, setSuccess] = useState<string>('')
+
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     username: '',
     verificationCode: ''
   })
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -28,16 +37,16 @@ const Auth = () => {
     setSuccess('')
   }
 
-  const validateEmail = (email) => {
+  const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email)
   }
 
-  const validatePassword = (password) => {
+  const validatePassword = (password: string): boolean => {
     return password.length >= 6
   }
 
-  const handleSendCode = async () => {
+  const handleSendCode = async (): Promise<void> => {
     if (!validateEmail(formData.email)) {
       setError(t('invalidEmail') || '请输入有效的邮箱地址')
       return
@@ -51,29 +60,29 @@ const Auth = () => {
     setLoading(true)
     setError('')
 
-    const { success, error, message } = await sendVerificationCode(formData.email, formData.username)
+    const result = await sendVerificationCode(formData.email, formData.username)
 
-    if (success) {
-      setSuccess(message || t('verificationCodeSent') || '验证码已发送到您的邮箱')
+    if (result.success) {
+      setSuccess(result.message || t('verificationCodeSent') || '验证码已发送到您的邮箱')
       setMode('verify')
     } else {
-      setError(error || t('sendCodeError') || '发送验证码失败')
+      setError(result.message || t('sendCodeError') || '发送验证码失败')
     }
 
     setLoading(false)
   }
 
-  const handleVerifyAndRegister = async () => {
+  const handleVerifyAndRegister = async (): Promise<void> => {
     if (!formData.verificationCode) {
       setError(t('enterVerificationCode') || '请输入验证码')
       return
     }
 
     // 验证验证码
-    const { valid, error: verifyError } = verifyCode(formData.email, formData.verificationCode)
-    
-    if (!valid) {
-      setError(verifyError || t('invalidVerificationCode') || '验证码错误')
+    const isValid = verifyCode(formData.email, formData.verificationCode)
+
+    if (!isValid) {
+      setError(t('invalidVerificationCode') || '验证码错误')
       return
     }
 
@@ -91,8 +100,8 @@ const Auth = () => {
     setLoading(true)
     setError('')
 
-    const { data, error } = await signUp(formData.email, formData.password, formData.username)
-    
+    const { error } = await signUp(formData.email, formData.password, formData.username)
+
     if (error) {
       setError(error.message || t('registerError') || '注册失败')
     } else {
@@ -103,11 +112,11 @@ const Auth = () => {
         setSuccess('')
       }, 2000)
     }
-    
+
     setLoading(false)
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (): Promise<void> => {
     if (!validateEmail(formData.email)) {
       setError(t('invalidEmail') || '请输入有效的邮箱地址')
       return
@@ -121,18 +130,18 @@ const Auth = () => {
     setLoading(true)
     setError('')
 
-    const { data, error } = await signIn(formData.email, formData.password)
-    
+    const { error } = await signIn(formData.email, formData.password)
+
     if (error) {
       setError(error.message || t('loginError') || '登录失败')
     }
-    
+
     setLoading(false)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    
+
     if (mode === 'login') {
       handleLogin()
     } else if (mode === 'register') {
@@ -217,7 +226,7 @@ const Auth = () => {
                 value={formData.verificationCode}
                 onChange={handleInputChange}
                 placeholder={t('verificationCodePlaceholder') || '请输入6位验证码'}
-                maxLength="6"
+                maxLength={6}
                 required
                 disabled={loading}
               />
@@ -236,8 +245,8 @@ const Auth = () => {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="auth-submit-btn"
             disabled={loading}
           >
@@ -255,8 +264,8 @@ const Auth = () => {
           {mode === 'login' ? (
             <p>
               {t('noAccount') || '还没有账户？'}{' '}
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="link-btn"
                 onClick={() => setMode('register')}
                 disabled={loading}
@@ -267,8 +276,8 @@ const Auth = () => {
           ) : mode === 'register' ? (
             <p>
               {t('hasAccount') || '已有账户？'}{' '}
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="link-btn"
                 onClick={() => setMode('login')}
                 disabled={loading}
@@ -278,8 +287,8 @@ const Auth = () => {
             </p>
           ) : (
             <p>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="link-btn"
                 onClick={() => setMode('register')}
                 disabled={loading}

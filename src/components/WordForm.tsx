@@ -1,45 +1,53 @@
-import { useState } from 'react';
-import { addWord } from '../utils/wordStorage';
-import { useLanguage } from '../contexts/LanguageContext';
-import './WordForm.css';
+import { useState, FormEvent, ChangeEvent } from 'react'
+import { addWord } from '../utils/wordStorage'
+import { useLanguage } from '../contexts/LanguageContext'
+import { WordFormProps } from '../types'
+import './WordForm.css'
 
-const WordForm = ({ onWordAdded }) => {
-  const { t, currentLanguage } = useLanguage();
-  const [formData, setFormData] = useState({
+interface FormData {
+  originalText: string
+  pronunciation: string
+  translation: string
+  example: string
+}
+
+const WordForm: React.FC<WordFormProps> = ({ onWordAdded }) => {
+  const { t } = useLanguage()
+  const [formData, setFormData] = useState<FormData>({
     originalText: '',
     pronunciation: '',
     translation: '',
     example: ''
-  });
+  })
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault()
 
     // 驗證必填字段
     if (!formData.originalText.trim() || !formData.translation.trim()) {
-      alert(t('fillRequired'));
-      return;
+      alert(t('fillRequired'))
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
-      const newWord = await addWord(
+      await addWord(
         formData.originalText,
         formData.pronunciation,
         formData.translation,
         formData.example
-      );
+      )
 
       // 清空表單
       setFormData({
@@ -47,30 +55,31 @@ const WordForm = ({ onWordAdded }) => {
         pronunciation: '',
         translation: '',
         example: ''
-      });
+      })
 
       // 通知父組件有新詞添加
       if (onWordAdded) {
-        onWordAdded(newWord);
+        onWordAdded()
       }
 
-      alert(t('wordAddSuccess'));
+      alert(t('wordAddSuccess'))
     } catch (error) {
-      console.error('Error adding word:', error);
-      alert(t('wordAddError') + '：' + (error.message || '未知錯誤'));
+      console.error('Error adding word:', error)
+      const errorMessage = error instanceof Error ? error.message : '未知錯誤'
+      alert(t('wordAddError') + '：' + errorMessage)
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
-  const handleReset = () => {
+  const handleReset = (): void => {
     setFormData({
       originalText: '',
       pronunciation: '',
       translation: '',
       example: ''
-    });
-  };
+    })
+  }
 
   return (
     <div className="word-form-container">
@@ -128,7 +137,7 @@ const WordForm = ({ onWordAdded }) => {
             value={formData.example}
             onChange={handleChange}
             placeholder={t('examplePlaceholder')}
-            rows="3"
+            rows={3}
           />
         </div>
 
@@ -151,7 +160,7 @@ const WordForm = ({ onWordAdded }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default WordForm;
+export default WordForm

@@ -1,18 +1,19 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import { useLanguage } from '../contexts/LanguageContext'
+import { ThemeId } from '../types'
 import './ThemeSelector.css'
 
-const ThemeSelector = () => {
+const ThemeSelector: React.FC = () => {
   const { currentTheme, changeTheme, themes } = useTheme()
   const { t, currentLanguage } = useLanguage()
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: globalThis.MouseEvent): void => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -23,7 +24,7 @@ const ThemeSelector = () => {
     }
   }, [])
 
-  const handleThemeChange = (themeId) => {
+  const handleThemeChange = (themeId: ThemeId): void => {
     changeTheme(themeId)
     setIsOpen(false)
   }
@@ -50,7 +51,7 @@ const ThemeSelector = () => {
             <button
               key={theme.id}
               className={`theme-option ${currentTheme === theme.id ? 'active' : ''}`}
-              onClick={() => handleThemeChange(theme.id)}
+              onClick={() => handleThemeChange(theme.id as ThemeId)}
             >
               <span className="theme-flag">{theme.icon}</span>
               <div className="theme-info">
