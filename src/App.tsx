@@ -80,6 +80,7 @@ const AppContent: React.FC = () => {
         <p className="storage-info">
           {isCloudConfigured ? `🌐 ${t('cloudStorage')}` : `💾 ${t('localStorage')}`}
         </p>
+        <p className="version-info">v0.2.0(20251003)</p>
       </footer>
     </div>
   )

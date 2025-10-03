@@ -127,6 +127,13 @@
   opacity: 0.6 !important;
 }
 
+.version-info {
+  font-size: 0.75rem !important;
+  opacity: 0.5 !important;
+  font-family: 'Courier New', monospace;
+  margin-top: 4px !important;
+}
+
 .setup-instructions {
   background: #e3f2fd;
   border: 2px solid #2196F3;
