@@ -78,11 +78,12 @@ export interface Theme {
   description: string
 }
 
-export type ThemeId = 'modern' | 'retro'
+export type ThemeId = 'modern' | 'retro' | 'claude'
 
 export interface ThemesMap {
   modern: Theme
   retro: Theme
+  claude: Theme
 }
 
 // ============================================
@@ -217,4 +218,5 @@ export interface ThemeContextType {
   themes: ThemesMap
   isRetro: boolean
   isModern: boolean
+  isClaude: boolean
 }

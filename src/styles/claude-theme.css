@@ -1,0 +1,429 @@
+/* Claude AI 主题样式 */
+
+/* 全局样式 */
+body.theme-claude {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FEF3E2 100%) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  color: #292524 !important;
+}
+
+/* 应用容器 */
+body.theme-claude .app {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FEF3E2 100%);
+  min-height: 100vh;
+}
+
+/* 头部样式 */
+body.theme-claude .app-header {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  border-bottom: 3px solid #92400E;
+  padding: 32px 24px;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2);
+}
+
+body.theme-claude .header-text h1 {
+  color: #FFFFFF;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.theme-claude .header-text p {
+  color: #FEF3E2;
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+/* 按钮样式 */
+body.theme-claude button {
+  background: #D97706;
+  color: #FFFFFF;
+  border: 2px solid #B45309;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(217, 119, 6, 0.15);
+}
+
+body.theme-claude button:hover:not(:disabled) {
+  background: #B45309;
+  border-color: #92400E;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(217, 119, 6, 0.25);
+}
+
+body.theme-claude button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(217, 119, 6, 0.2);
+}
+
+body.theme-claude button:disabled {
+  background: #D6D3D1;
+  color: #78716C;
+  border-color: #E7E5E4;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 输入框样式 */
+body.theme-claude input,
+body.theme-claude textarea {
+  background: #FFFFFF;
+  color: #292524;
+  border: 2px solid #E7E5E4;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+body.theme-claude input:focus,
+body.theme-claude textarea:focus {
+  outline: none;
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+/* 卡片样式 */
+body.theme-claude .word-form-container,
+body.theme-claude .word-list-container,
+body.theme-claude .word-stats {
+  background: #FFFFFF;
+  border: 2px solid #E7E5E4;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 16px;
+  padding: 24px;
+}
+
+/* 标题样式 */
+body.theme-claude h2,
+body.theme-claude h3 {
+  color: #292524;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+body.theme-claude h2 {
+  font-size: 1.5rem;
+  border-bottom: 2px solid #FCD34D;
+  padding-bottom: 8px;
+}
+
+/* 表单样式 */
+body.theme-claude .form-group label {
+  color: #57534E;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* 词汇表格样式 */
+body.theme-claude .word-table-container {
+  border: 2px solid #E7E5E4;
+  border-radius: 12px;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+body.theme-claude .word-table {
+  font-size: 1rem;
+}
+
+body.theme-claude .word-table thead {
+  background: linear-gradient(135deg, #FCD34D 0%, #FDE68A 100%);
+}
+
+body.theme-claude .word-table th {
+  background: transparent;
+  color: #292524;
+  border-bottom: 2px solid #D97706;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+body.theme-claude .word-table td {
+  background: #FFFFFF;
+  color: #292524;
+  border-bottom: 1px solid #E7E5E4;
+  padding: 12px 16px;
+}
+
+body.theme-claude .word-table tbody tr:hover td {
+  background-color: #FEF3E2;
+}
+
+body.theme-claude .original-text {
+  color: #292524;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+body.theme-claude .pronunciation {
+  color: #B45309;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+body.theme-claude .translation {
+  color: #059669;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+body.theme-claude .example {
+  color: #57534E;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* 编辑按钮样式 */
+body.theme-claude .edit-btn {
+  background: #0891B2;
+  border-color: #0E7490;
+}
+
+body.theme-claude .edit-btn:hover {
+  background: #0E7490;
+  border-color: #155E75;
+}
+
+body.theme-claude .save-btn {
+  background: #059669;
+  border-color: #047857;
+}
+
+body.theme-claude .save-btn:hover {
+  background: #047857;
+  border-color: #065F46;
+}
+
+body.theme-claude .cancel-btn {
+  background: #78716C;
+  border-color: #57534E;
+}
+
+body.theme-claude .cancel-btn:hover {
+  background: #57534E;
+  border-color: #292524;
+}
+
+body.theme-claude .delete-btn {
+  background: #DC2626;
+  border-color: #B91C1C;
+}
+
+body.theme-claude .delete-btn:hover {
+  background: #B91C1C;
+  border-color: #991B1B;
+}
+
+/* 搜索组件样式 */
+body.theme-claude .word-search {
+  background: #FEF3E2;
+  border: 2px solid #FCD34D;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.1);
+}
+
+body.theme-claude .search-title {
+  color: #D97706;
+  font-weight: 700;
+}
+
+body.theme-claude .search-term {
+  background: #FCD34D;
+  color: #292524;
+  border: 2px solid #D97706;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+/* 收藏词汇样式 */
+body.theme-claude .word-row.favorited {
+  background: #FEF3E2;
+  border-left: 4px solid #D97706;
+}
+
+body.theme-claude .word-row.favorited:hover td {
+  background: #FCD34D33;
+}
+
+body.theme-claude .favorite-btn {
+  background: transparent;
+  color: #D97706;
+  border: 2px solid #D97706;
+}
+
+body.theme-claude .favorite-btn:hover {
+  background: #D97706;
+  color: #FFFFFF;
+}
+
+body.theme-claude .favorite-btn.favorited {
+  background: #D97706;
+  color: #FFFFFF;
+  border-color: #B45309;
+}
+
+/* 统计卡片样式 */
+body.theme-claude .stat-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FEF3E2 100%);
+  border: 2px solid #E7E5E4;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body.theme-claude .stat-number {
+  color: #D97706;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+body.theme-claude .stat-label {
+  color: #57534E;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* 页脚样式 */
+body.theme-claude .app-footer {
+  background: linear-gradient(135deg, #292524 0%, #57534E 100%);
+  color: #FEF3E2;
+  border-top: 3px solid #D97706;
+}
+
+/* 认证界面样式 */
+body.theme-claude .auth-container {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FEF3E2 100%);
+}
+
+body.theme-claude .auth-card {
+  background: #FFFFFF;
+  border: 2px solid #E7E5E4;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.15);
+}
+
+body.theme-claude .auth-header h2 {
+  color: #D97706;
+}
+
+body.theme-claude .auth-submit-btn {
+  background: #D97706;
+  border-color: #B45309;
+}
+
+body.theme-claude .link-btn {
+  color: #D97706;
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
+
+body.theme-claude .link-btn:hover {
+  color: #B45309;
+}
+
+/* 错误和成功消息 */
+body.theme-claude .error-message {
+  background: #FEE2E2;
+  color: #DC2626;
+  border: 2px solid #DC2626;
+  border-radius: 8px;
+}
+
+body.theme-claude .success-message {
+  background: #D1FAE5;
+  color: #059669;
+  border: 2px solid #059669;
+  border-radius: 8px;
+}
+
+/* 滚动条样式 */
+body.theme-claude ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+body.theme-claude ::-webkit-scrollbar-track {
+  background: #FEF3E2;
+  border-radius: 6px;
+}
+
+body.theme-claude ::-webkit-scrollbar-thumb {
+  background: #D97706;
+  border-radius: 6px;
+  border: 2px solid #FEF3E2;
+}
+
+body.theme-claude ::-webkit-scrollbar-thumb:hover {
+  background: #B45309;
+}
+
+/* 加载动画 */
+body.theme-claude .loading-spinner {
+  border: 4px solid #FEF3E2;
+  border-top: 4px solid #D97706;
+  border-radius: 50%;
+}
+
+/* 账户菜单样式 */
+body.theme-claude .account-trigger {
+  background: rgba(255, 248, 240, 0.2);
+  border: 2px solid rgba(254, 243, 226, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-claude .account-trigger:hover {
+  background: rgba(255, 248, 240, 0.3);
+  border-color: rgba(254, 243, 226, 0.5);
+}
+
+body.theme-claude .account-dropdown {
+  background: #FFFFFF;
+  border: 2px solid #E7E5E4;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+body.theme-claude .dropdown-header {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  color: #FFFFFF;
+}
+
+body.theme-claude .menu-item:hover {
+  background: #FEF3E2;
+  color: #292524;
+}
+
+body.theme-claude .logout-item:hover {
+  background: #FEF3E2;
+  color: #D97706;
+}
+
+body.theme-claude .delete-account-item:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  body.theme-claude .app-header {
+    padding: 24px 16px;
+  }
+
+  body.theme-claude h1 {
+    font-size: 2rem !important;
+  }
+
+  body.theme-claude h2 {
+    font-size: 1.25rem !important;
+  }
+}

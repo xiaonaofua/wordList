@@ -13,6 +13,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import './App.css'
 import './styles/retro-theme.css'
+import './styles/claude-theme.css'
 
 // 主應用組件（內部）
 const AppContent: React.FC = () => {

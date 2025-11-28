@@ -154,6 +154,7 @@ export const translations: Record<LanguageCode, Translations> = {
     theme: 'Theme',
     retroTheme: 'Retro Style',
     modernTheme: 'Modern Style',
+    claudeTheme: 'Claude Style',
 
     // 表格
     actions: 'Actions',
@@ -304,6 +305,7 @@ export const translations: Record<LanguageCode, Translations> = {
     theme: '主题',
     retroTheme: '复古风格',
     modernTheme: '现代风格',
+    claudeTheme: 'Claude 风格',
 
     // 表格
     actions: '操作',

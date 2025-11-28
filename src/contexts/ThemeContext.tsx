@@ -16,6 +16,13 @@ export const THEMES: ThemesMap = {
     nameCN: '现代风格',
     icon: '✨',
     description: 'Clean and contemporary design'
+  },
+  claude: {
+    id: 'claude',
+    name: 'Claude',
+    nameCN: 'Claude 风格',
+    icon: '🤖',
+    description: 'Warm and professional Claude AI style'
   }
 }
 
@@ -60,7 +67,8 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     changeTheme,
     themes: THEMES,
     isRetro: currentTheme === 'retro',
-    isModern: currentTheme === 'modern'
+    isModern: currentTheme === 'modern',
+    isClaude: currentTheme === 'claude'
   }
 
   return (
