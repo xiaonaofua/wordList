@@ -129,7 +129,7 @@ body.theme-claude .word-table-container {
 }
 
 body.theme-claude .word-table {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 body.theme-claude .word-table thead {
@@ -142,7 +142,6 @@ body.theme-claude .word-table th {
   border-bottom: 2px solid #CC785C;
   padding: 12px 16px;
   font-weight: 700;
-  font-size: 0.95rem;
 }
 
 body.theme-claude .word-table td {
@@ -159,7 +158,7 @@ body.theme-claude .word-table tbody tr:hover td {
 body.theme-claude .original-text {
   color: #2D2D2D;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 body.theme-claude .pronunciation {
@@ -176,7 +175,7 @@ body.theme-claude .translation {
 
 body.theme-claude .example {
   color: #5A5A52;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-style: italic;
 }
 
@@ -282,7 +281,7 @@ body.theme-claude .stat-card {
 
 body.theme-claude .stat-number {
   color: #CC785C;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
 }
 
