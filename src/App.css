@@ -203,7 +203,15 @@
     font-size: 1rem;
   }
 
-  .setup-btn {
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .setup-btn,
+  .debug-btn,
+  .migration-btn {
     padding: 10px 16px;
     font-size: 0.85rem;
   }
@@ -321,4 +329,51 @@
   background: rgba(220, 53, 69, 1);
   border-color: rgba(220, 53, 69, 0.8);
   transform: translateY(-1px);
+}
+
+/* 手機豎屏優化 */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 20px 12px;
+  }
+
+  .app-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .app-header p {
+    font-size: 0.9rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .header-actions > * {
+    width: 100%;
+  }
+
+  .app-main {
+    padding: 12px;
+  }
+
+  .word-form-container,
+  .word-list-container,
+  .word-stats {
+    margin: 12px 0;
+    padding: 16px;
+  }
+}
+
+/* 超小屏幕優化 */
+@media (max-width: 360px) {
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .app-header p {
+    font-size: 0.85rem;
+  }
 }
