@@ -17,12 +17,12 @@ export const THEMES: ThemesMap = {
     icon: '✨',
     description: 'Clean and contemporary design'
   },
-  claude: {
-    id: 'claude',
-    name: 'Claude',
-    nameCN: 'Claude 风格',
-    icon: '🤖',
-    description: 'Warm and professional Claude AI style'
+  neumorphism: {
+    id: 'neumorphism',
+    name: 'Neumorphism',
+    nameCN: '新拟物风格',
+    icon: '🎨',
+    description: 'Soft 3D design with gentle shadows'
   }
 }
 
@@ -68,7 +68,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     themes: THEMES,
     isRetro: currentTheme === 'retro',
     isModern: currentTheme === 'modern',
-    isClaude: currentTheme === 'claude'
+    isClaude: currentTheme === 'neumorphism'
   }
 
   return (

@@ -78,12 +78,12 @@ export interface Theme {
   description: string
 }
 
-export type ThemeId = 'modern' | 'retro' | 'claude'
+export type ThemeId = 'modern' | 'retro' | 'neumorphism'
 
 export interface ThemesMap {
   modern: Theme
   retro: Theme
-  claude: Theme
+  neumorphism: Theme
 }
 
 // ============================================
