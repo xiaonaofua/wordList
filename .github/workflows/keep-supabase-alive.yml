@@ -1,0 +1,72 @@
+name: Keep Supabase Alive
+
+# 每 5 天自动运行一次，保持 Supabase 项目活跃
+# Supabase 免费版会在 7 天无活动后暂停，此任务确保项目不会被暂停
+on:
+  schedule:
+    # 每 5 天的 UTC 时间 02:00 运行 (北京时间 10:00)
+    - cron: '0 2 */5 * *'
+  
+  # 允许手动触发
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ping Supabase to keep it alive
+        env:
+          VITE_SUPABASE_URL: https://dcqhsrwojhpoynahkewp.supabase.co
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          node -e "
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabaseUrl = process.env.VITE_SUPABASE_URL;
+          const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjcWhzcndvamhwb3luYWhrZXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1MTI2MjUsImV4cCI6MjA2NjA4ODYyNX0.0VEiKPawHosmoUqE3a_P0TENNmXYUBqHhDS1PA0yFL0';
+          
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          
+          (async () => {
+            try {
+              console.log('🔄 Pinging Supabase...');
+              console.log('📍 URL:', supabaseUrl);
+              
+              // 执行简单查询以保持连接活跃
+              const { data, error, count } = await supabase
+                .from('words')
+                .select('id', { count: 'exact', head: true });
+              
+              if (error) {
+                console.error('❌ Error:', error.message);
+                process.exit(1);
+              }
+              
+              console.log('✅ Supabase is alive!');
+              console.log('📊 Total records in words table:', count || 0);
+              console.log('⏰ Last ping:', new Date().toISOString());
+              
+            } catch (err) {
+              console.error('❌ Failed to ping Supabase:', err);
+              process.exit(1);
+            }
+          })();
+          "
+
+      - name: Report status
+        if: always()
+        run: |
+          echo "Job completed at: $(date)"
+          echo "Next scheduled run: In 5 days"

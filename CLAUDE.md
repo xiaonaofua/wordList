@@ -25,6 +25,9 @@ npm run lint
 
 # 部署到 GitHub Pages
 npm run deploy
+
+# 手动 ping Supabase (保持项目活跃)
+npm run ping-supabase
 ```
 
 ## Architecture Overview
@@ -245,6 +248,33 @@ build: {
 - Type safety improvements
 - Statistics and verification results
 
+## Supabase Keep-Alive Mechanism
+
+**Problem**: Supabase 免费版会在 7 天无活动后自动暂停项目
+
+**Solution**: 自动化定时任务保持项目活跃
+
+### GitHub Actions 自动唤醒
+
+配置文件: `.github/workflows/keep-supabase-alive.yml`
+
+**运行频率**: 每 5 天自动执行一次  
+**执行时间**: UTC 02:00 (北京时间 10:00)  
+**操作内容**: 
+- 查询 `words` 表统计记录数
+- 检查认证服务状态
+- 自动刷新项目活跃时间
+
+**手动触发方式**:
+1. 本地测试: `npm run ping-supabase`
+2. GitHub Actions: 进入仓库 → Actions → "Keep Supabase Alive" → Run workflow
+
+### 监控建议
+
+- 在 GitHub Actions 页面查看执行历史
+- 如果任务连续失败，检查 Supabase 项目状态
+- 确保 GitHub Actions 已启用（公开仓库默认启用）
+
 ## Important Notes
 
 - **Base Path**: All routes must account for `/wordList/` base (GitHub Pages)
@@ -253,3 +283,4 @@ build: {
 - **i18n**: All user-facing text must be translated (en/zh)
 - **Responsive**: Mobile-first design, test on all breakpoints
 - **Type Safety**: Use types from `src/types/index.ts` for all new code
+- **Supabase Keep-Alive**: Automated via GitHub Actions, runs every 5 days
