@@ -139,8 +139,8 @@
 }
 
 .col-actions {
-  width: 5%;
-  min-width: 50px;
+  width: 120px; /* 固定宽度，容纳3个按钮 */
+  min-width: 120px;
   text-align: center;
 }
 
@@ -181,6 +181,8 @@
   display: flex;
   gap: 4px;
   justify-content: center;
+  align-items: center;
+  min-width: 100px; /* 固定最小宽度，防止布局跳动 */
 }
 
 .favorite-btn {
@@ -195,8 +197,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
+  width: 28px; /* 固定宽度 */
   height: 24px;
+  flex-shrink: 0; /* 防止缩小 */
 }
 
 .favorite-btn:hover {
@@ -256,8 +259,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
+  width: 28px; /* 固定宽度 */
   height: 24px;
+  flex-shrink: 0; /* 防止缩小 */
 }
 
 .edit-btn:hover {
@@ -277,8 +281,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
+  width: 28px; /* 固定宽度 */
   height: 24px;
+  flex-shrink: 0; /* 防止缩小 */
 }
 
 .delete-btn:hover {
