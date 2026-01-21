@@ -139,8 +139,8 @@
 }
 
 .col-actions {
-  width: 120px; /* 固定宽度，容纳3个按钮 */
-  min-width: 120px;
+  width: 130px; /* 固定宽度，容纳3个按钮 */
+  min-width: 130px;
   text-align: center;
 }
 

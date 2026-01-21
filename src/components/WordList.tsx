@@ -13,6 +13,22 @@ interface EditFormData {
   example: string
 }
 
+// SVG 图标组件（确保尺寸完全一致）
+const StarIcon: React.FC<{ filled?: boolean }> = ({ filled = false }) => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill={filled ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </svg>
+)
+
 const WordList: React.FC<WordListProps> = ({ refreshTrigger }) => {
   const { t, currentLanguage } = useLanguage()
   const [words, setWords] = useState<Word[]>([])
@@ -362,7 +378,7 @@ const WordList: React.FC<WordListProps> = ({ refreshTrigger }) => {
                               onClick={() => handleToggleFavorite(word.id)}
                               title={word.is_favorite ? t('removeFavorite') || '取消收藏' : t('addFavorite') || '添加收藏'}
                             >
-                              {word.is_favorite ? '⭐' : '☆'}
+                              <StarIcon filled={!!word.is_favorite} />
                             </button>
                             <button
                               className="edit-btn"

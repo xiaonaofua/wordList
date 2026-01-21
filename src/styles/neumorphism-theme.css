@@ -358,12 +358,25 @@ body.theme-neumorphism .word-row.favorited:hover td {
   background: linear-gradient(145deg, #e8ecf4 0%, #dce0ec 100%);
 }
 
+/* 收藏按钮 - 使用 SVG 图标 */
 body.theme-neumorphism .favorite-btn {
   background: var(--neu-surface);
   color: var(--neu-warning);
-  box-shadow: 
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex-shrink: 0;
+  box-shadow:
     4px 4px 8px var(--neu-shadow-dark),
     -4px -4px 8px var(--neu-shadow-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.theme-neumorphism .favorite-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 body.theme-neumorphism .favorite-btn:hover {
@@ -374,7 +387,9 @@ body.theme-neumorphism .favorite-btn:hover {
 body.theme-neumorphism .favorite-btn.favorited {
   background: linear-gradient(145deg, var(--neu-warning), #ffa726);
   color: #ffffff;
-  box-shadow: 
+  width: 28px;
+  height: 28px;
+  box-shadow:
     4px 4px 8px rgba(237, 137, 54, 0.3),
     inset 2px 2px 4px rgba(255, 255, 255, 0.3);
 }
