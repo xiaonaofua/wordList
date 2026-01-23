@@ -340,10 +340,15 @@ body.theme-neumorphism .search-term {
 /* 收藏词汇样式 */
 body.theme-neumorphism .word-row.favorited {
   background: linear-gradient(145deg, #f0f2f8 0%, #e8ecf4 100%);
+  border-left: none; /* 覆盖默认样式的边框，避免冲突 */
+}
+
+/* 将指示条移动到第一个单元格，避免 tr::before 导致的布局错位 */
+body.theme-neumorphism .word-row.favorited td:first-child {
   position: relative;
 }
 
-body.theme-neumorphism .word-row.favorited::before {
+body.theme-neumorphism .word-row.favorited td:first-child::before {
   content: '';
   position: absolute;
   left: 0;

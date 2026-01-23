@@ -193,23 +193,22 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8rem;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 28px; /* 固定宽度 */
   height: 24px;
   flex-shrink: 0; /* 防止缩小 */
+  line-height: 1; /* 防止行高导致的布局变化 */
 }
 
 .favorite-btn:hover {
   background: rgba(255, 193, 7, 0.1);
-  transform: scale(1.1);
 }
 
 .favorite-btn.favorited {
   color: #ffc107;
-  text-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
 }
 
 /* 收藏词汇行的特殊样式 */
@@ -255,18 +254,18 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 28px; /* 固定宽度 */
   height: 24px;
   flex-shrink: 0; /* 防止缩小 */
+  line-height: 1;
 }
 
 .edit-btn:hover {
   background: #0056b3;
-  transform: scale(1.05);
 }
 
 .delete-btn {
@@ -277,18 +276,18 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 28px; /* 固定宽度 */
   height: 24px;
   flex-shrink: 0; /* 防止缩小 */
+  line-height: 1;
 }
 
 .delete-btn:hover {
   background: #c82333;
-  transform: scale(1.05);
 }
 
 /* 编辑模式样式 */
@@ -306,17 +305,17 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 28px;
   height: 24px;
+  line-height: 1;
 }
 
 .save-btn:hover {
   background: #1e7e34;
-  transform: scale(1.05);
 }
 
 .cancel-btn {
@@ -327,17 +326,17 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 28px;
   height: 24px;
+  line-height: 1;
 }
 
 .cancel-btn:hover {
   background: #545b62;
-  transform: scale(1.05);
 }
 
 .edit-input {
