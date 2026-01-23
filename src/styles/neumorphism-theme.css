@@ -225,7 +225,8 @@ body.theme-neumorphism .word-table-container {
   box-shadow: 
     inset 3px 3px 6px var(--neu-shadow-dark),
     inset -3px -3px 6px var(--neu-shadow-light);
-  overflow: hidden;
+  overflow-x: auto; /* 允许水平滚动 */
+  overflow-y: hidden; /* 竖屏时隐藏竖向滚动条 */
 }
 
 body.theme-neumorphism .word-table {
@@ -646,7 +647,9 @@ body.theme-neumorphism .delete-account-item:hover {
   }
 
   body.theme-neumorphism .word-table-container {
-    -webkit-overflow-scrolling: touch;
+    overflow-x: auto; /* 确保小屏幕上能水平滚动 */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
     border-radius: 16px;
   }
 
