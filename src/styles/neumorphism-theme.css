@@ -646,6 +646,10 @@ body.theme-neumorphism .delete-account-item:hover {
     border-radius: 20px;
   }
 
+  body.theme-neumorphism .word-list-container {
+    overflow: visible; /* 允許內部表格容器正常滾動 */
+  }
+
   body.theme-neumorphism .word-table-container {
     overflow-x: auto; /* 确保小屏幕上能水平滚动 */
     overflow-y: hidden;
