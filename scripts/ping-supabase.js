@@ -21,7 +21,7 @@ async function pingSupabase() {
     console.log(`📍 URL: ${supabaseUrl}`)
     
     // 1. 检查数据库连接
-    const { data: dbData, error: dbError, count } = await supabase
+    const { error: dbError, count } = await supabase
       .from('words')
       .select('id', { count: 'exact', head: true })
     
@@ -33,7 +33,7 @@ async function pingSupabase() {
     console.log(`📊 词汇表记录数: ${count || 0}`)
     
     // 2. 检查认证服务
-    const { data: { session }, error: authError } = await supabase.auth.getSession()
+    const { error: authError } = await supabase.auth.getSession()
     
     if (authError) {
       console.warn(`⚠️  认证检查警告: ${authError.message}`)
@@ -61,7 +61,7 @@ async function pingSupabase() {
 
 // 执行 ping
 pingSupabase()
-  .then((result) => {
+  .then(() => {
     console.log('\n✅ 任务完成')
     process.exit(0)
   })
